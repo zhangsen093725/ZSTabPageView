@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ZSTabPageView_Example' do
+  pod 'ZSTabPageView', :path => '../'
+
+  target 'ZSTabPageView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -9,16 +9,59 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    lazy var plainBtn: UIButton = {
+        
+        let button = UIButton(type: .system)
+        button.setTitle("TableView嵌套Plain", for: .normal)
+        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        return button
+    }()
+    
+    lazy var button: UIButton = {
+        
+        let button = UIButton(type: .system)
+        button.setTitle("TableView", for: .normal)
+        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        navigationController?.navigationBar.isTranslucent = false
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        let buttonW: CGFloat = 150
+        let buttonH: CGFloat = 60
+        let buttonX: CGFloat = (view.frame.width - buttonW) * 0.5
+        
+        button.frame = CGRect(x: buttonX, y: 60, width: buttonW, height: buttonH)
+        plainBtn.frame = CGRect(x: buttonX, y: button.frame.maxY + 20, width: buttonW, height: buttonH)
+    }
 
+    @objc func buttonAction(_ sender: UIButton) {
+        
+        if sender == plainBtn
+        {
+            navigationController?.pushViewController(ZSTabPagePlainDemoController(), animated: true)
+        }
+        else
+        {
+            navigationController?.pushViewController(ZSTabPageDemoController(), animated: true)
+        }
+    }
+    
 }
 

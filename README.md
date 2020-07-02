@@ -1,15 +1,24 @@
 # ZSTabPageView
 
-[![CI Status](https://img.shields.io/travis/zhangsen093725/ZSTabPageView.svg?style=flat)](https://travis-ci.org/zhangsen093725/ZSTabPageView)
 [![Version](https://img.shields.io/cocoapods/v/ZSTabPageView.svg?style=flat)](https://cocoapods.org/pods/ZSTabPageView)
 [![License](https://img.shields.io/cocoapods/l/ZSTabPageView.svg?style=flat)](https://cocoapods.org/pods/ZSTabPageView)
 [![Platform](https://img.shields.io/cocoapods/p/ZSTabPageView.svg?style=flat)](https://cocoapods.org/pods/ZSTabPageView)
 
-## Example
+## Author
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+Josh, 376019018@qq.com
 
-## Requirements
+## Desc
+
+1. 顶部标签切换内容联动
+2. ScrollView多级嵌套联动，可定义header和悬浮Tab
+
+## 版本日志
+
+### 0.1.0
+
+1. ```ZSTabPageServe``` 顶部标签切换内容联动
+2. ```ZSTabPageTablePlainViewServe``` ScrollView多级嵌套联动，可定义header和悬浮Tab
 
 ## Installation
 
@@ -20,10 +29,9 @@ it, simply add the following line to your Podfile:
 pod 'ZSTabPageView'
 ```
 
-## Author
-
-zhangsen093725, joshzhang@yntengyun.com
-
 ## License
 
 ZSTabPageView is available under the MIT license. See the LICENSE file for more info.
+
+
+

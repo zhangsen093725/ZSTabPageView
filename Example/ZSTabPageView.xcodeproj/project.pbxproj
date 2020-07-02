@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4ED2CD5124ADD89D0040F270 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */; };
+		4ED2CD5224ADD89D0040F270 /* ZSTabPagePlainDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */; };
+		4ED2CD5424ADDA700040F270 /* ZSTabPageDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -31,6 +34,9 @@
 		0EB16FB9AC99B0D9E54BA9C2 /* Pods-ZSTabPageView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Example.debug.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		14D04174646A9F16174FE787 /* Pods-ZSTabPageView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Tests/Pods-ZSTabPageView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		482D5A48B359D689A8967A81 /* Pods_ZSTabPageView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZSTabPageView_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZSTabPagePlainDemoController.swift; sourceTree = "<group>"; };
+		4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSTabPageDemoController.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* ZSTabPageView_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZSTabPageView_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -43,9 +49,9 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		66C2BD7CCEC78C29D7FDA6CF /* Pods-ZSTabPageView_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Tests.release.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Tests/Pods-ZSTabPageView_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		810CC5A53453052CECA6C023 /* Pods_ZSTabPageView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZSTabPageView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3087B69107EE88AB71A0CA9 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		BAC3C5487973AC248F8B61BB /* ZSTabPageView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = ZSTabPageView.podspec; path = ../ZSTabPageView.podspec; sourceTree = "<group>"; };
-		C638CFC14E7BFE6A4F265A0A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		B3087B69107EE88AB71A0CA9 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		BAC3C5487973AC248F8B61BB /* ZSTabPageView.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZSTabPageView.podspec; path = ../ZSTabPageView.podspec; sourceTree = "<group>"; };
+		C638CFC14E7BFE6A4F265A0A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		CE6F30D96863419FB7118D54 /* Pods-ZSTabPageView_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Example.release.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,6 +109,9 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */,
+				4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */,
+				4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -156,7 +165,6 @@
 				14D04174646A9F16174FE787 /* Pods-ZSTabPageView_Tests.debug.xcconfig */,
 				66C2BD7CCEC78C29D7FDA6CF /* Pods-ZSTabPageView_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -171,7 +179,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				80023111FCEBC0D2857F3680 /* [CP] Embed Pods Frameworks */,
+				AB2606ACD390C3226EEF6FB9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -227,6 +235,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -262,24 +271,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		80023111FCEBC0D2857F3680 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ZSTabPageView/ZSTabPageView.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZSTabPageView.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		90A862C536EB57EED9148A20 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -300,6 +291,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB2606ACD390C3226EEF6FB9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ZSTabPageView/ZSTabPageView.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZSTabPageView.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CEF813ACAB4CD5B074A22B65 /* [CP] Check Pods Manifest.lock */ = {
@@ -332,7 +341,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				4ED2CD5424ADDA700040F270 /* ZSTabPageDemoController.swift in Sources */,
+				4ED2CD5124ADD89D0040F270 /* TableViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				4ED2CD5224ADD89D0040F270 /* ZSTabPagePlainDemoController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,7 +496,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -499,7 +511,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

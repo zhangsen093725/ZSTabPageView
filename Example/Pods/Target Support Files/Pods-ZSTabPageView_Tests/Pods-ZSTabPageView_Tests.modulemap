@@ -1,0 +1,6 @@
+framework module Pods_ZSTabPageView_Tests {
+  umbrella header "Pods-ZSTabPageView_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

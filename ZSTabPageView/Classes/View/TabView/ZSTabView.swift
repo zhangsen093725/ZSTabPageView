@@ -44,9 +44,9 @@ import UIKit
         super.init(frame: frame, collectionViewLayout: layout)
     }
     
-    convenience public init(frame: CGRect, collectionViewFlowLayout layout: UICollectionViewFlowLayout) {
+    convenience public init(collectionViewFlowLayout layout: UICollectionViewFlowLayout) {
         
-        self.init(frame: frame, collectionViewLayout: layout)
+        self.init(frame: .zero, collectionViewLayout: layout)
     }
     
     required public init?(coder: NSCoder) {

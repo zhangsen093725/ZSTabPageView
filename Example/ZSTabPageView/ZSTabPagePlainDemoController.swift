@@ -54,7 +54,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
-        let tabView = ZSTabView(frame: .zero, collectionViewFlowLayout: layout)
+        let tabView = ZSTabView(collectionViewFlowLayout: layout)
         
         if #available(iOS 11.0, *) {
             tabView.contentInsetAdjustmentBehavior = .never

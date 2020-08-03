@@ -43,7 +43,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
     
     lazy var contentServe: ZSTabPageTablePlainViewServe = {
         
-        let contentServe = ZSTabPageTablePlainViewServe(selectIndex: 2)
+        let contentServe = ZSTabPageTablePlainViewServe(selectIndex: -1)
         contentServe.delegate = self
         contentServe.dataSource = self
         return contentServe

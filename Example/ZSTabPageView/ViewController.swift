@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    lazy var plainBtn: UIButton = {
+    lazy var button2: UIButton = {
         
         let button = UIButton(type: .system)
         button.setTitle("TableView嵌套Plain", for: .normal)
@@ -48,12 +48,12 @@ class ViewController: UIViewController {
         let buttonX: CGFloat = (view.frame.width - buttonW) * 0.5
         
         button.frame = CGRect(x: buttonX, y: 60, width: buttonW, height: buttonH)
-        plainBtn.frame = CGRect(x: buttonX, y: button.frame.maxY + 20, width: buttonW, height: buttonH)
+        button2.frame = CGRect(x: buttonX, y: button.frame.maxY + 20, width: buttonW, height: buttonH)
     }
 
     @objc func buttonAction(_ sender: UIButton) {
         
-        if sender == plainBtn
+        if sender == button2
         {
             navigationController?.pushViewController(ZSTabPagePlainDemoController(), animated: true)
         }

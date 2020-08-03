@@ -140,7 +140,8 @@ import UIKit
         isUserInteractionEnabled = false
         
         let min: CGFloat = 0
-        let max = contentSize.width - (isHorizontal ? frame.width : frame.height)
+        var max = contentSize.width - (isHorizontal ? frame.width : frame.height)
+        max = max > 0 ? max : 0
         
         let cellCenter = isHorizontal ? cell.center.x : cell.center.y
         let centerContentOffset = cellCenter - (isHorizontal ? center.x : center.y)

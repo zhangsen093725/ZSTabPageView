@@ -59,7 +59,8 @@ import UIKit
     public var selectIndex: Int { return _selectIndex_ }
     
     open func zs_setSelectedIndex(_ index: Int) {
-        _selectIndex_ = index
+        let _index = index > 0 ? index : 0
+        _selectIndex_ = _index < tabCount ? _index : tabCount - 1
         guard isBeginDecelerating == false else { return }
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
     }

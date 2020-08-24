@@ -15,6 +15,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         
         let tabPageView = ZSTabPageView()
         tabPageView.tabView.sliderLength = 20
+        tabPageView.tabView.isSliderHidden = true
         view.addSubview(tabPageView)
         return tabPageView
     }()

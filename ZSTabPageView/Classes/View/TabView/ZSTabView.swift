@@ -112,6 +112,7 @@ import UIKit
     
     open func cellForIndex(_ index: Int, isHorizontal: Bool) -> UICollectionViewCell? {
         
+        layoutIfNeeded()
         let indexPath = IndexPath(item: index, section: 0)
         
         let cell = cellForItem(at: indexPath)

@@ -143,16 +143,12 @@ import UIKit
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
-        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return 0 }
-        
-        return flowLayout.scrollDirection == .vertical ? minimumSpacing : 0
+        return minimumSpacing
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         
-        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return 0 }
-        
-        return flowLayout.scrollDirection == .horizontal ? minimumSpacing : 0
+        return minimumSpacing
     }
     
     // TODO: UICollectionViewDelegate

@@ -10,7 +10,14 @@ import UIKit
 
 @objcMembers open class ZSTabPageView: UIView {
     
-    open lazy var tabView: ZSTabView = {
+    /// tabView的高度
+    public var tabViewHeight: CGFloat = 44 {
+        didSet {
+            layoutSubviews()
+        }
+    }
+    
+    public lazy var tabView: ZSTabView = {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -21,7 +28,6 @@ import UIKit
             tabView.contentInsetAdjustmentBehavior = .never
         }
         
-        tabView.isPagingEnabled = true
         tabView.backgroundColor = .clear
         tabView.showsHorizontalScrollIndicator = false
         
@@ -39,8 +45,7 @@ import UIKit
          if #available(iOS 11.0, *) {
              pageView.contentInsetAdjustmentBehavior = .never
          }
-         
-         pageView.isPagingEnabled = true
+
          pageView.backgroundColor = .clear
          pageView.showsHorizontalScrollIndicator = false
         
@@ -51,7 +56,7 @@ import UIKit
     open override func layoutSubviews() {
         super.layoutSubviews()
         
-        tabView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 44)
+        tabView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: tabViewHeight)
         pageView.frame = CGRect(x: 0, y: tabView.frame.maxY, width: bounds.width, height: bounds.height - tabView.frame.maxY)
     }
 }

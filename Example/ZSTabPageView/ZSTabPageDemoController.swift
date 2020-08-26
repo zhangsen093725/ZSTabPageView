@@ -25,7 +25,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
-        tabPageServe.tabViewServe.tabViewInsert = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        tabPageServe.tabViewServe.tabViewInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         tabPageServe.tabViewServe.minimumSpacing = 18
         return tabPageServe
     }()

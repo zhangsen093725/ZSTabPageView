@@ -48,6 +48,13 @@ import UIKit
         }
     }
     
+    /// tab insert
+    public var tabViewInset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) {
+        didSet {
+            collectionView?.reloadData()
+        }
+    }
+    
     private var _selectIndex_: Int = 0
     
     /// 当前选择的 tab 索引
@@ -66,13 +73,6 @@ import UIKit
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: true)
-    }
-    
-    /// tab insert
-    public var tabViewInsert: UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) {
-        didSet {
-            collectionView?.reloadData()
-        }
     }
     
     public func zs_bind(collectionView: ZSTabView, register cellClass: ZSTabCell.Type) {
@@ -138,7 +138,7 @@ import UIKit
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return tabViewInsert
+        return tabViewInset
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

@@ -9,6 +9,15 @@ import UIKit
 
 @objcMembers open class ZSPageView: UICollectionView {
     
+    open override var isPagingEnabled: Bool {
+        set {
+            super.isPagingEnabled = true
+        }
+        get {
+            return true
+        }
+    }
+    
     override open func layoutSubviews() {
         super.layoutSubviews()
         
@@ -20,6 +29,15 @@ import UIKit
                                  isAnimation: Bool) {
         reloadData()
         
-        scrollToItem(at: IndexPath(item: index, section: 0), at: .right, animated: isAnimation)
+        let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
+        
+        if flowLayout?.scrollDirection == .horizontal
+        {
+            scrollToItem(at: IndexPath(item: index, section: 0), at: .right, animated: isAnimation)
+        }
+        else
+        {
+            scrollToItem(at: IndexPath(item: index, section: 0), at: .bottom, animated: isAnimation)
+        }
     }
 }

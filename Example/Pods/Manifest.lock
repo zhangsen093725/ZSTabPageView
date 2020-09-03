@@ -1,5 +1,5 @@
 PODS:
-  - ZSTabPageView (0.1.0)
+  - ZSTabPageView (0.1.5)
 
 DEPENDENCIES:
   - ZSTabPageView (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZSTabPageView: bfcb411dfe8647146d683ac5f87d898f22121c52
+  ZSTabPageView: 7e632353ea275fc923ddaf703716f565c24e58ff
 
 PODFILE CHECKSUM: 9bb419558de5695add6d618c38eac94a47db42e1
 

@@ -27,6 +27,15 @@ class ViewController: UIViewController {
         view.addSubview(button)
         return button
     }()
+    
+    lazy var button3: UIButton = {
+        
+        let button = UIButton(type: .system)
+        button.setTitle("TabCategory", for: .normal)
+        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +58,7 @@ class ViewController: UIViewController {
         
         button.frame = CGRect(x: buttonX, y: 60, width: buttonW, height: buttonH)
         button2.frame = CGRect(x: buttonX, y: button.frame.maxY + 20, width: buttonW, height: buttonH)
+        button3.frame = CGRect(x: buttonX, y: button2.frame.maxY + 20, width: buttonW, height: buttonH)
     }
 
     @objc func buttonAction(_ sender: UIButton) {
@@ -56,6 +66,10 @@ class ViewController: UIViewController {
         if sender == button2
         {
             navigationController?.pushViewController(ZSTabPagePlainDemoController(), animated: true)
+        }
+        else if sender == button3
+        {
+            navigationController?.pushViewController(ZSTabCategoryDemoController(), animated: true)
         }
         else
         {

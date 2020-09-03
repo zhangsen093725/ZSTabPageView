@@ -1,24 +1,23 @@
 //
-//  ZSTabPageView.swift
-//  JadeToB
+//  ZSTabCategoryView.swift
+//  Pods-ZSTabPageView_Example
 //
-//  Created by 张森 on 2020/1/13.
-//  Copyright © 2020 张森. All rights reserved.
+//  Created by Josh on 2020/9/3.
 //
 
 import UIKit
 
-@objcMembers open class ZSTabPageView: UIView {
-    
-    /// tabView的高度
-    public var tabViewHeight: CGFloat = 44 {
+@objcMembers open class ZSTabCategoryView: UIView {
+
+    /// tabView的宽度
+    public var tabViewWidth: CGFloat = 80 {
         didSet {
             layoutSubviews()
         }
     }
     
-    /// spaceView的高度
-    public var spaceViewHeight: CGFloat = 0 {
+    /// spaceView的宽度
+    public var spaceViewWidth: CGFloat = 0.5 {
         didSet {
             layoutSubviews()
         }
@@ -34,7 +33,7 @@ import UIKit
     public lazy var tabView: ZSTabView = {
         
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         
         let tabView = ZSTabView(collectionViewFlowLayout: layout)
         
@@ -43,7 +42,7 @@ import UIKit
         }
         
         tabView.backgroundColor = .clear
-        tabView.showsHorizontalScrollIndicator = false
+        tabView.showsVerticalScrollIndicator = false
         
         addSubview(tabView)
         return tabView
@@ -53,7 +52,7 @@ import UIKit
         
         let spaceView = UIImageView()
         
-        spaceView.backgroundColor = .systemGray
+        spaceView.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         
         addSubview(spaceView)
         return spaceView
@@ -62,7 +61,7 @@ import UIKit
     public lazy var pageView: ZSPageView = {
         
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
+        layout.scrollDirection = .vertical
         
         let pageView = ZSPageView(frame: .zero, collectionViewLayout: layout)
         
@@ -71,7 +70,7 @@ import UIKit
         }
         
         pageView.backgroundColor = .clear
-        pageView.showsHorizontalScrollIndicator = false
+        pageView.showsVerticalScrollIndicator = false
         
         addSubview(pageView)
         return pageView
@@ -80,8 +79,8 @@ import UIKit
     open override func layoutSubviews() {
         super.layoutSubviews()
         
-        tabView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: tabViewHeight)
-        spaceView.frame = CGRect(x: spaceViewInsets.left, y: tabView.frame.maxY + spaceViewInsets.top - spaceViewInsets.bottom, width: bounds.width - spaceViewInsets.left - spaceViewInsets.right, height: spaceViewHeight)
-        pageView.frame = CGRect(x: 0, y: tabView.frame.maxY, width: bounds.width, height: bounds.height - tabView.frame.maxY)
+        tabView.frame = CGRect(x: 0, y: 0, width: tabViewWidth, height: bounds.height)
+        spaceView.frame = CGRect(x: tabView.frame.maxX + spaceViewInsets.left - spaceViewInsets.right, y: spaceViewInsets.top, width: spaceViewWidth, height: bounds.height - spaceViewInsets.top - spaceViewInsets.bottom)
+        pageView.frame = CGRect(x: tabView.frame.maxX, y: 0, width: bounds.width - spaceView.frame.maxX, height: bounds.height)
     }
 }

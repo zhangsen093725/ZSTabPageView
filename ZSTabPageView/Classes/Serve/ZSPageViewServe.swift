@@ -9,15 +9,33 @@ import UIKit
 
 @objc public protocol ZSPageViewServeDelegate {
     
+    /// Page需要展示的View
+    /// - Parameter index: 当前Page的索引
     func zs_pageView(at index: Int) -> UIView
+    
+    /// Page将要消失的View
+    /// - Parameter index: 当前Page的索引
     func zs_pageViewWillDisappear(at index: Int)
+    
+    /// Page将要显示的View
+    /// - Parameter index: 当前Page的索引
     func zs_pageViewWillAppear(at index: Int)
 }
 
 @objc public protocol ZSPageViewScrollDelegate {
     
+    /// page 滚动的回调
+    /// - Parameters:
+    ///   - scrollView: 当前滚动的ScrollView
+    ///   - page: 当前的页码
     func zs_pageViewDidScroll(_ scrollView: UIScrollView, page: Int)
+    
+    /// page 将要滚动，手指放上
+    /// - Parameter scrollView: 当前滚动的ScrollView
     func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
+    
+    /// page 滚动结束，手指离开
+    /// - Parameter scrollView: 当前滚动的ScrollView
     func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
 }
 
@@ -138,9 +156,20 @@ import UIKit
     // TODO: UIScrollViewDelegate
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+        
         guard isBeginDecelerating else { return }
         
-        let page = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
+        var page: Int = 0
+        
+        if flowLayout?.scrollDirection == .horizontal
+        {
+           page = Int(scrollView.contentOffset.x / scrollView.frame.width + 0.5)
+        }
+        else
+        {
+           page = Int(scrollView.contentOffset.y / scrollView.frame.height + 0.5)
+        }
         
         scrollDelegate?.zs_pageViewDidScroll(scrollView, page: page)
         

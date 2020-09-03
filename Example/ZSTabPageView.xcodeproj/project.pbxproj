@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E566F982500C8AE008C45CF /* ZSTabCategoryDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E566F972500C8AE008C45CF /* ZSTabCategoryDemoController.swift */; };
 		4ED2CD5124ADD89D0040F270 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */; };
 		4ED2CD5224ADD89D0040F270 /* ZSTabPagePlainDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */; };
 		4ED2CD5424ADDA700040F270 /* ZSTabPageDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */; };
@@ -34,6 +35,7 @@
 		0EB16FB9AC99B0D9E54BA9C2 /* Pods-ZSTabPageView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Example.debug.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Example/Pods-ZSTabPageView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		14D04174646A9F16174FE787 /* Pods-ZSTabPageView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZSTabPageView_Tests.debug.xcconfig"; path = "Target Support Files/Pods-ZSTabPageView_Tests/Pods-ZSTabPageView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		482D5A48B359D689A8967A81 /* Pods_ZSTabPageView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZSTabPageView_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E566F972500C8AE008C45CF /* ZSTabCategoryDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSTabCategoryDemoController.swift; sourceTree = "<group>"; };
 		4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZSTabPagePlainDemoController.swift; sourceTree = "<group>"; };
 		4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSTabPageDemoController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				4ED2CD4F24ADD89D0040F270 /* TableViewController.swift */,
 				4ED2CD5024ADD89D0040F270 /* ZSTabPagePlainDemoController.swift */,
 				4ED2CD5324ADDA700040F270 /* ZSTabPageDemoController.swift */,
+				4E566F972500C8AE008C45CF /* ZSTabCategoryDemoController.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
@@ -347,6 +350,7 @@
 				4ED2CD5124ADD89D0040F270 /* TableViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				4ED2CD5224ADD89D0040F270 /* ZSTabPagePlainDemoController.swift in Sources */,
+				4E566F982500C8AE008C45CF /* ZSTabCategoryDemoController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

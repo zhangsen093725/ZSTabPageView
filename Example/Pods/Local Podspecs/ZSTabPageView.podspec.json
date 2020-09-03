@@ -1,8 +1,8 @@
 {
   "name": "ZSTabPageView",
-  "version": "0.1.0",
-  "summary": "A short description of ZSTabPageView.",
-  "description": "TODO: Add long description of the pod here.",
+  "version": "0.1.5",
+  "summary": "标签和内容联动View",
+  "description": "1. 顶部标签切换内容联动\n2. ScrollView多级嵌套联动，可定义header和悬浮Tab",
   "homepage": "https://github.com/zhangsen093725/ZSTabPageView",
   "license": {
     "type": "MIT",
@@ -13,10 +13,12 @@
   },
   "source": {
     "git": "https://github.com/zhangsen093725/ZSTabPageView.git",
-    "tag": "0.1.0"
+    "tag": "0.1.5"
   },
+  "swift_versions": "4.0",
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "ZSTabPageView/Classes/**/*"
+  "source_files": "ZSTabPageView/Classes/**/*",
+  "swift_version": "4.0"
 }

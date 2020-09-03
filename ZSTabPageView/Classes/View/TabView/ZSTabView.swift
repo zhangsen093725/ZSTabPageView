@@ -71,7 +71,7 @@ import UIKit
         }
         else
         {
-            sliderView.frame.origin.x = cell.frame.origin.x + self.sliderWidth + sliderInset.left - sliderInset.right
+            sliderView.frame.origin.x = sliderInset.left - sliderInset.right
             sliderView.frame.size.width = self.sliderWidth
             sliderView.frame.size.height = sliderLength > 0 ? sliderLength : cell.frame.height
         }
@@ -141,7 +141,7 @@ import UIKit
         isUserInteractionEnabled = false
         
         let min: CGFloat = 0
-        var max = contentSize.width - (isHorizontal ? frame.width : frame.height)
+        var max =  isHorizontal ? (contentSize.width - frame.width) : (contentSize.height - frame.height)
         max = max > 0 ? max : 0
         
         let cellCenter = isHorizontal ? cell.center.x : cell.center.y

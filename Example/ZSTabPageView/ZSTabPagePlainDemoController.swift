@@ -19,8 +19,6 @@ class TableBaseView: UITableView, UIGestureRecognizerDelegate {
 
 class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabViewServeDataSource {
     
-    
-    
     public lazy var tableView: TableBaseView = {
         
         let tableView = TableBaseView(frame: .zero, style: .plain)

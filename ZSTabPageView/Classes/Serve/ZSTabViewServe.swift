@@ -9,12 +9,22 @@
 import UIKit
 
 @objc public protocol ZSTabViewServeDelegate {
+    
+    /// tab 点击回调
+    /// - Parameter index: 当前点击的索引
     func zs_tabViewDidSelected(at index: Int)
 }
 
 @objc public protocol ZSTabViewServeDataSource {
     
+    /// tab cell的大小
+    /// - Parameter index: 当前Cell的索引
     @objc func zs_configTabCellSize(forItemAt index: Int) -> CGSize
+    
+    /// tab cell
+    /// - Parameters:
+    ///   - cell: 当前的Cell
+    ///   - index: 当前Cell的索引
     @objc func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int)
 }
 

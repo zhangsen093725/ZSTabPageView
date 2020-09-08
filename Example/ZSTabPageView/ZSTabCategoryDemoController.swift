@@ -14,7 +14,7 @@ class ZSTabCategoryDemoController: UIViewController, ZSPageViewServeDelegate, ZS
     lazy var tabPageView: ZSTabCategoryView = {
         
         let tabPageView = ZSTabCategoryView()
-//        tabPageView.tabView.sliderLength = 20
+        tabPageView.tabView.sliderLength = 20
         tabPageView.tabView.isSliderHidden = false
         view.addSubview(tabPageView)
         return tabPageView

@@ -27,6 +27,13 @@ import UIKit
         }
     }
     
+    /// tabView的高度
+    public var tabViewHeight: CGFloat = 44 {
+        didSet {
+            tableView?.reloadData()
+        }
+    }
+    
     /// 是否开始拖拽
     private var isBeginDecelerating: Bool = false
     
@@ -182,6 +189,8 @@ import UIKit
         
         guard scrollView.contentSize != .zero else { return }
         
+        guard tableView?.style == .plain else { return }
+        
         let bottomOffset = scrollView.contentSize.height - scrollView.bounds.height
         
         if scrollView.contentOffset.y >= bottomOffset
@@ -237,7 +246,7 @@ import UIKit
     
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return tableView.frame.size.height - 44
+        return tableView.frame.size.height - tabViewHeight
     }
     
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -248,7 +257,7 @@ import UIKit
     
     open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return 44
+        return tabViewHeight
     }
 }
 

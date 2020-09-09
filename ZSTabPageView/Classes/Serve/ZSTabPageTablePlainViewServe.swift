@@ -34,6 +34,9 @@ import UIKit
         }
     }
     
+    /// tabView的高度
+    public var isSectionFloatEnable: Bool = true
+    
     /// 是否开始拖拽
     private var isBeginDecelerating: Bool = false
     
@@ -189,9 +192,19 @@ import UIKit
         
         guard scrollView.contentSize != .zero else { return }
         
-        guard tableView?.style == .plain else { return }
-        
         let bottomOffset = scrollView.contentSize.height - scrollView.bounds.height
+        
+        if isSectionFloatEnable == false
+        {
+            if scrollView.contentOffset.y <= bottomOffset - tabViewHeight && scrollView.contentOffset.y >= 0
+            {
+                scrollView.contentInset = UIEdgeInsets(top: -scrollView.contentOffset.y, left: 0, bottom: 0, right: 0)
+            }
+            else if scrollView.contentOffset.y >= bottomOffset - tabViewHeight
+            {
+                scrollView.contentInset = UIEdgeInsets(top: -(bottomOffset - tabViewHeight), left: 0, bottom: 0, right: 0);
+            }
+        }
         
         if scrollView.contentOffset.y >= bottomOffset
         {
@@ -246,7 +259,7 @@ import UIKit
     
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return tableView.frame.size.height - tabViewHeight
+        return tableView.frame.size.height
     }
     
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

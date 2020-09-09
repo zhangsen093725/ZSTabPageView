@@ -8,6 +8,7 @@
 
 import UIKit
 import ZSTabPageView
+import ZSViewUtil
 
 class TableBaseView: UITableView, UIGestureRecognizerDelegate {
     

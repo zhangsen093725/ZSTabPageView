@@ -1,16 +1,25 @@
 PODS:
-  - ZSTabPageView (0.1.5)
+  - ZSTabPageView (0.1.8)
+  - ZSViewUtil (0.6.4):
+    - ZSViewUtil/All (= 0.6.4)
+  - ZSViewUtil/All (0.6.4)
 
 DEPENDENCIES:
   - ZSTabPageView (from `../`)
+  - ZSViewUtil
+
+SPEC REPOS:
+  trunk:
+    - ZSViewUtil
 
 EXTERNAL SOURCES:
   ZSTabPageView:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZSTabPageView: 7e632353ea275fc923ddaf703716f565c24e58ff
+  ZSTabPageView: 9afedd3bc2c699f0c70b32db3c4127af04270dd4
+  ZSViewUtil: 62539f68c570cd5648ea4e18386b2a3b9cdbd41c
 
-PODFILE CHECKSUM: 9bb419558de5695add6d618c38eac94a47db42e1
+PODFILE CHECKSUM: 1cbbbd6cae88c2c1fa320723256ba697983f25ae
 
 COCOAPODS: 1.9.3

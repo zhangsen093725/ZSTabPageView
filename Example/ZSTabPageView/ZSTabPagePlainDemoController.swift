@@ -45,6 +45,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         let contentServe = ZSTabPageTablePlainViewServe(selectIndex: -1)
         contentServe.delegate = self
         contentServe.dataSource = self
+        contentServe.isSectionFloatEnable = false
         return contentServe
     }()
     
@@ -91,7 +92,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         view.backgroundColor = .white
         
         contentServe.zs_bindTableView(tableView, tabView: tabView, pageView: pageView)
-        self.contentServe.tabCount = self.tabTexts.count
+        contentServe.tabCount = self.tabTexts.count
     }
     
     override func viewWillLayoutSubviews() {

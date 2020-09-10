@@ -26,9 +26,9 @@ import UIKit
     
     public var sliderInset: UIEdgeInsets = .zero
     
-    public lazy var sliderView: UIView = {
+    public lazy var sliderView: UIImageView = {
         
-        let sliderView = UIView()
+        let sliderView = UIImageView()
         sliderView.isHidden = isSliderHidden
         sliderView.backgroundColor = UIColor.systemGray
         addSubview(sliderView)

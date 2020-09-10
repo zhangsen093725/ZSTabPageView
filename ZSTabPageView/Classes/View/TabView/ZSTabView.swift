@@ -8,6 +8,17 @@
 
 import UIKit
 
+@objc public enum ZSTabViewSliderVerticalAlignment: Int {
+    
+    case Center = 0, Top = 1, Bottom = 2
+}
+
+@objc public enum ZSTabViewSliderHorizontalAlignment: Int {
+    
+    case Center = 0, Left = 1, Right = 2
+}
+
+
 @objcMembers open class ZSTabView: UICollectionView {
     
     /// 是否隐藏底部的滑块
@@ -24,6 +35,13 @@ import UIKit
     /// 滑块的长度
     public var sliderLength: CGFloat = 0
     
+    /// slider 垂直方向的对齐方式
+    public var sliderVerticalAlignment: ZSTabViewSliderVerticalAlignment = .Bottom
+    
+    /// slider 水平方向的对齐方式
+    public var sliderHorizontalAlignment: ZSTabViewSliderHorizontalAlignment = .Center
+    
+    /// slider 根据Insets来进行调整偏移
     public var sliderInset: UIEdgeInsets = .zero
     
     public lazy var sliderView: UIImageView = {
@@ -62,18 +80,94 @@ import UIKit
                                   isHorizontal: Bool,
                                   isAnimation: Bool) {
         
+        var sliderOffset: CGFloat = 0
+        
         // SliderView 位置初始化
         if isHorizontal
         {
-            sliderView.frame.origin.y = cell.frame.maxY - self.sliderWidth - sliderInset.bottom + sliderInset.top
-            sliderView.frame.size.width = sliderLength > 0 ? sliderLength : cell.frame.width
-            sliderView.frame.size.height = self.sliderWidth
+            sliderView.frame.size.width = sliderLength > 0 ? sliderLength : (cell.frame.width - sliderInset.left - sliderInset.right)
+            sliderView.frame.size.height = sliderWidth > 0 ? sliderWidth :  (cell.frame.height - sliderInset.top - sliderInset.bottom)
         }
         else
         {
-            sliderView.frame.origin.x = sliderInset.left - sliderInset.right
-            sliderView.frame.size.width = self.sliderWidth
-            sliderView.frame.size.height = sliderLength > 0 ? sliderLength : cell.frame.height
+            sliderView.frame.size.width = sliderWidth > 0 ? sliderWidth :  (cell.frame.height - sliderInset.top - sliderInset.bottom)
+            sliderView.frame.size.height = sliderLength > 0 ? sliderLength : (cell.frame.width - sliderInset.left - sliderInset.right)
+        }
+        
+        switch sliderVerticalAlignment {
+        case .Center:
+            
+            if isHorizontal
+            {
+                sliderView.frame.origin.y = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.left - sliderInset.right
+            }
+            else
+            {
+                sliderOffset = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.left - sliderInset.right
+            }
+            break
+            
+        case .Top:
+            
+            if isHorizontal
+            {
+                sliderView.frame.origin.y = sliderInset.top
+            }
+            else
+            {
+                sliderOffset = cell.frame.origin.y + sliderInset.top
+            }
+            break
+            
+        case .Bottom:
+            
+            if isHorizontal
+            {
+                sliderView.frame.origin.y = frame.size.height - sliderView.frame.size.height - sliderInset.bottom
+            }
+            else
+            {
+                sliderOffset = cell.frame.maxY - sliderView.frame.size.height - sliderInset.bottom
+            }
+            break
+        }
+        
+        switch sliderHorizontalAlignment {
+        case .Center:
+            
+            if isHorizontal
+            {
+                sliderOffset = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.top - sliderInset.bottom
+            }
+            else
+            {
+                sliderView.frame.origin.x = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.top - sliderInset.bottom
+            }
+            break
+            
+        case .Left:
+            
+            if isHorizontal
+            {
+                sliderOffset = cell.frame.origin.x + sliderInset.left
+            }
+            else
+            {
+                sliderView.frame.origin.x = sliderInset.left
+            }
+            break
+            
+        case .Right:
+            
+            if isHorizontal
+            {
+                sliderOffset = cell.frame.maxX - sliderView.frame.size.width - sliderInset.right
+            }
+            else
+            {
+                sliderView.frame.origin.x = frame.size.width - sliderView.frame.size.width - sliderInset.right
+            }
+            break
         }
         
         // SliderView 动画
@@ -81,11 +175,11 @@ import UIKit
         {
             if isHorizontal
             {
-                sliderView.frame.origin.x = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5
+                sliderView.frame.origin.x = sliderOffset
             }
             else
             {
-                sliderView.frame.origin.y = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5
+                sliderView.frame.origin.y = sliderOffset
             }
             isUserInteractionEnabled = true
         }
@@ -96,11 +190,11 @@ import UIKit
                 
                 if isHorizontal
                 {
-                    self?.sliderView.frame.origin.x = cell.frame.origin.x + (cell.frame.size.width - (self?.sliderView.frame.size.width ?? 0)) * 0.5
+                    self?.sliderView.frame.origin.x = sliderOffset
                 }
                 else
                 {
-                    self?.sliderView.frame.origin.y = cell.frame.origin.y + (cell.frame.size.height - (self?.sliderView.frame.size.height ?? 0)) * 0.5
+                    self?.sliderView.frame.origin.y = sliderOffset
                 }
                 
             }) { [weak self] (finished) in
@@ -117,7 +211,7 @@ import UIKit
         let indexPath = IndexPath(item: index, section: 0)
         
         let cell = cellForItem(at: indexPath)
-
+        
         if cell == nil
         {
             scrollToItem(at: indexPath, at: isHorizontal ? .centeredHorizontally : .centeredVertically, animated: false)
@@ -130,13 +224,13 @@ import UIKit
     
     open func beginScrollToIndex(_ index: Int,
                                  isAnimation: Bool) {
-
+        
         guard frame != .zero else { return }
         
         guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return }
         
         let isHorizontal = flowLayout.scrollDirection == .horizontal
-
+        
         guard let cell = cellForIndex(index, isHorizontal: isHorizontal) else { return }
         
         isUserInteractionEnabled = false

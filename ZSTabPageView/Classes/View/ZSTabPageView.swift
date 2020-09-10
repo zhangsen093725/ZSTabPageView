@@ -42,6 +42,8 @@ import UIKit
             tabView.contentInsetAdjustmentBehavior = .never
         }
         
+        tabView.sliderVerticalAlignment = .Bottom
+        tabView.sliderHorizontalAlignment = .Center
         tabView.backgroundColor = .clear
         tabView.showsHorizontalScrollIndicator = false
         

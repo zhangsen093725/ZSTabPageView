@@ -42,6 +42,8 @@ import UIKit
         }
         
         tabView.backgroundColor = .clear
+        tabView.sliderVerticalAlignment = .Center
+        tabView.sliderHorizontalAlignment = .Left
         tabView.showsVerticalScrollIndicator = false
         
         addSubview(tabView)

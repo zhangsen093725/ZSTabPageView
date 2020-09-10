@@ -14,7 +14,13 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     lazy var tabPageView: ZSTabPageView = {
         
         let tabPageView = ZSTabPageView()
-        tabPageView.tabView.sliderLength = 20
+        tabPageView.tabView.sliderView.image = UIImage(named: "ic_tab_selected")
+        tabPageView.tabView.sliderView.backgroundColor = .clear
+        tabPageView.tabView.sliderLength = 24
+        tabPageView.tabView.sliderWidth = 14
+        tabPageView.tabView.sliderVerticalAlignment = .Bottom
+        tabPageView.tabView.sliderHorizontalAlignment = .Right
+        tabPageView.tabView.sliderInset = UIEdgeInsets(top: 0, left: 0, bottom: -4, right: -8);
         tabPageView.tabView.isSliderHidden = false
         view.addSubview(tabPageView)
         return tabPageView
@@ -78,7 +84,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     // TODO: ZSTabViewServeDataSource
     func zs_configTabCellSize(forItemAt index: Int) -> CGSize {
         
-        return CGSize(width: 30 + index * 10, height: 44)
+        return CGSize(width: 30 + index * 10, height: 20)
     }
     
     func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int) {

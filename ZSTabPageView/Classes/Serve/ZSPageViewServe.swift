@@ -171,13 +171,13 @@ import UIKit
            page = Int(scrollView.contentOffset.y / scrollView.frame.height + 0.5)
         }
         
-        scrollDelegate?.zs_pageViewDidScroll(scrollView, page: page)
-        
-        if selectIndex != page && page < tabCount {
-            
+        if selectIndex != page && page < tabCount
+        {
             delegate?.zs_pageViewWillAppear(at: page)
             delegate?.zs_pageViewWillDisappear(at: selectIndex)
         }
+        
+        scrollDelegate?.zs_pageViewDidScroll(scrollView, page: page)
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {

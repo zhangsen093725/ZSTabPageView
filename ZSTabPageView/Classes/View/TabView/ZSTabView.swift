@@ -89,8 +89,8 @@ import UIKit
         }
         else
         {
-            sliderView.frame.size.width = sliderWidth > 0 ? sliderWidth :  (cell.frame.height - sliderInset.top - sliderInset.bottom)
-            sliderView.frame.size.height = sliderLength > 0 ? sliderLength : (cell.frame.width - sliderInset.left - sliderInset.right)
+            sliderView.frame.size.width = sliderWidth > 0 ? sliderWidth :  (cell.frame.width - sliderInset.left - sliderInset.right)
+            sliderView.frame.size.height = sliderLength > 0 ? sliderLength : (cell.frame.height - sliderInset.top - sliderInset.bottom)
         }
         
         switch sliderVerticalAlignment {

@@ -20,7 +20,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         tabPageView.tabView.sliderWidth = 14
         tabPageView.tabView.sliderVerticalAlignment = .Bottom
         tabPageView.tabView.sliderHorizontalAlignment = .Right
-        tabPageView.tabView.sliderInset = UIEdgeInsets(top: 0, left: 0, bottom: -4, right: -8);
+        tabPageView.tabView.sliderInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0);
         tabPageView.tabView.isSliderHidden = false
         view.addSubview(tabPageView)
         return tabPageView

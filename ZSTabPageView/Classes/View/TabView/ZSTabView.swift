@@ -1,6 +1,6 @@
 //
 //  ZSTabView.swift
-//  JadeToB
+//  ZSTabPageView
 //
 //  Created by 张森 on 2020/1/13.
 //  Copyright © 2020 张森. All rights reserved.
@@ -49,7 +49,6 @@ import UIKit
         let sliderView = UIImageView()
         sliderView.isHidden = isSliderHidden
         sliderView.backgroundColor = UIColor.systemGray
-        addSubview(sliderView)
         return sliderView
     }()
     
@@ -168,6 +167,11 @@ import UIKit
                 sliderView.frame.origin.x = frame.size.width - sliderView.frame.size.width - sliderInset.right
             }
             break
+        }
+        
+        if sliderView.superview == nil
+        {
+            insertSubview(sliderView, at: 0)
         }
         
         // SliderView 动画

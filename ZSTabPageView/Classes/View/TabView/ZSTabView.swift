@@ -98,11 +98,11 @@ import UIKit
             
             if isHorizontal
             {
-                sliderView.frame.origin.y = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.left - sliderInset.right
+                sliderView.frame.origin.y = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.top - sliderInset.bottom
             }
             else
             {
-                sliderOffset = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.left - sliderInset.right
+                sliderOffset = cell.frame.origin.y + (cell.frame.size.height - sliderView.frame.size.height) * 0.5 + sliderInset.top - sliderInset.bottom
             }
             break
             
@@ -136,11 +136,11 @@ import UIKit
             
             if isHorizontal
             {
-                sliderOffset = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.top - sliderInset.bottom
+                sliderOffset = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.left - sliderInset.right
             }
             else
             {
-                sliderView.frame.origin.x = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.top - sliderInset.bottom
+                sliderView.frame.origin.x = cell.frame.origin.x + (cell.frame.size.width - sliderView.frame.size.width) * 0.5 + sliderInset.left - sliderInset.right
             }
             break
             

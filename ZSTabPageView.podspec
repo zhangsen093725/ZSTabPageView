@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZSTabPageView'
-  s.version          = '0.2.4'
+  s.version          = '0.2.5'
   s.summary          = '标签和内容联动View'
 
 # This description is used to generate tags and improve search results.

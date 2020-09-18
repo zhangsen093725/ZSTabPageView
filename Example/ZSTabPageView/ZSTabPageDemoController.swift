@@ -43,9 +43,11 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         // Do any additional setup after loading the view.
         
         tabPageServe.zs_bindTabView(tabPageView)
+        self.tabPageServe.tabCount = 3
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.tabPageServe.tabCount = self.tabTexts.count
-            self.tabPageServe .zs_setSelectedIndex(3)
+            self.tabPageServe.zs_setSelectedIndex(5)
         }
     }
     

@@ -32,6 +32,7 @@ import UIKit
     
     public var tabCount: Int = 0 {
         didSet {
+            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
             tabViewServe.tabCount = tabCount
             pageViewServe.tabCount = tabCount
         }

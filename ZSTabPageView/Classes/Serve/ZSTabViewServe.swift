@@ -48,6 +48,7 @@ import UIKit
     public var tabCount: Int = 0 {
         didSet {
             collectionView?.reloadData()
+            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
             collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         }
     }

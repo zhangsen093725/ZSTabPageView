@@ -28,7 +28,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     
     lazy var tabPageServe: ZSTabPageViewServe = {
         
-        let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
+        let tabPageServe = ZSTabPageViewServe(selectIndex: 5)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
         tabPageServe.tabViewServe.tabViewInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -43,7 +43,10 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         // Do any additional setup after loading the view.
         
         tabPageServe.zs_bindTabView(tabPageView)
-        tabPageServe.tabCount = tabTexts.count
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.tabPageServe.tabCount = self.tabTexts.count
+            self.tabPageServe .zs_setSelectedIndex(3)
+        }
     }
     
     override func viewWillLayoutSubviews() {

@@ -102,14 +102,6 @@ import UIKit
         }
     }
     
-    open func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        
-    }
-    
-    open func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        
-    }
-    
     // TODO: ZSTabViewServeDelegate
     open func zs_tabViewDidSelected(at index: Int) {
         zs_setSelectedIndex(index)

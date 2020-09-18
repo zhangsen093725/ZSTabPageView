@@ -48,6 +48,7 @@ import UIKit
     public var tabCount: Int = 0 {
         didSet {
             collectionView?.reloadData()
+            collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         }
     }
     
@@ -80,6 +81,8 @@ import UIKit
     }
     
     open func zs_setSelectedIndex(_ index: Int) {
+        
+        guard tabCount > 0 else { return }
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: true)

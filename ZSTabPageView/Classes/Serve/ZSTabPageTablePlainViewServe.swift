@@ -34,11 +34,8 @@ import UIKit
         }
     }
     
-    /// tabView的高度
+    /// section是否开启悬浮
     public var isSectionFloatEnable: Bool = true
-    
-    /// 是否开始拖拽
-    private var isBeginDecelerating: Bool = false
     
     /// base view 是否可以滚动
     private var isShouldBaseScroll: Bool = true
@@ -156,21 +153,11 @@ import UIKit
         
         guard scrollView.contentSize != .zero else { return }
         
-        if scrollView.contentOffset.x >= 0 && isBeginDecelerating
+        if scrollView.contentOffset.x >= 0
         {
             isShouldPageScroll = !isShouldBaseScroll
-            tableView?.isScrollEnabled = false
             return
         }
-    }
-    
-    open func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        isBeginDecelerating = true
-    }
-    
-    open func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        isBeginDecelerating = false
-        tableView?.isScrollEnabled = true
     }
     
     // TODO: ZSTabViewServeDelegate

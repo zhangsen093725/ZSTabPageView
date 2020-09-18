@@ -32,16 +32,17 @@ import UIKit
     
     /// page 将要滚动，手指放上
     /// - Parameter scrollView: 当前滚动的ScrollView
-    func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
+    @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
     
     /// page 滚动结束，手指离开
     /// - Parameter scrollView: 当前滚动的ScrollView
-    func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
+    @objc optional func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
 }
 
 @objcMembers open class ZSPageViewServe: NSObject, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    fileprivate var isBeginDecelerating: Bool = false
+    /// UICollectionView 是否允许ScrollToIndex
+    fileprivate var collectionViewScrollToIndexEnable: Bool = true
     
     public weak var collectionView: ZSPageView? {
         
@@ -59,6 +60,7 @@ import UIKit
     public var tabCount: Int = 0 {
         didSet {
             collectionView?.reloadData()
+            collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         }
     }
     
@@ -77,9 +79,11 @@ import UIKit
     public var selectIndex: Int { return _selectIndex_ }
     
     open func zs_setSelectedIndex(_ index: Int) {
+        
+        guard tabCount > 0 else { return }
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
-        guard isBeginDecelerating == false else { return }
+        guard collectionViewScrollToIndexEnable else { return }
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
     }
     
@@ -158,7 +162,7 @@ import UIKit
         
         let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
         
-        guard isBeginDecelerating else { return }
+        guard collectionViewScrollToIndexEnable == false else { return }
         
         var page: Int = 0
         
@@ -181,13 +185,13 @@ import UIKit
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        isBeginDecelerating = true
-        scrollDelegate?.zs_pageViewWillBeginDecelerating(scrollView)
+        collectionViewScrollToIndexEnable = false
+        scrollDelegate?.zs_pageViewWillBeginDecelerating?(scrollView)
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        isBeginDecelerating = false
-        scrollDelegate?.zs_pageViewDidEndDecelerating(scrollView)
+        collectionViewScrollToIndexEnable = true
+        scrollDelegate?.zs_pageViewDidEndDecelerating?(scrollView)
     }
     
     // TODO: UICollectionViewDataSource

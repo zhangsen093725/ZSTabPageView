@@ -45,7 +45,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         let contentServe = ZSTabPageTablePlainViewServe(selectIndex: -1)
         contentServe.delegate = self
         contentServe.dataSource = self
-        contentServe.isSectionFloatEnable = false
+        contentServe.isSectionFloatEnable = true
         return contentServe
     }()
     

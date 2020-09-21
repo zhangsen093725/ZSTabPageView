@@ -46,7 +46,7 @@ import UIKit
     /// slider 水平方向的对齐方式
     public var sliderHorizontalAlignment: ZSTabViewSliderHorizontalAlignment = .Center
     
-    /// 滑块滑动的动画
+    /// slider 滑动的动画
     public var sliderAnimation: ZSTabViewSliderAnimation = .Default
     
     /// slider 根据Insets来进行调整偏移

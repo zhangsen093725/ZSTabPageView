@@ -18,6 +18,11 @@ import UIKit
     case Center = 0, Left = 1, Right = 2
 }
 
+@objc public enum ZSTabViewSliderAnimation: Int {
+    
+    case Default = 0, KeepSlide = 1, Together = 2, KeepTogetherSlide = 3
+}
+
 
 @objcMembers open class ZSTabView: UICollectionView {
     
@@ -41,8 +46,14 @@ import UIKit
     /// slider 水平方向的对齐方式
     public var sliderHorizontalAlignment: ZSTabViewSliderHorizontalAlignment = .Center
     
+    /// 滑块滑动的动画
+    public var sliderAnimation: ZSTabViewSliderAnimation = .Default
+    
     /// slider 根据Insets来进行调整偏移
     public var sliderInset: UIEdgeInsets = .zero
+    
+    /// 当前选择的 tab 索引
+    private var selectIndex: Int = 0
     
     public lazy var sliderView: UIImageView = {
         
@@ -75,9 +86,8 @@ import UIKit
 // TODO: 动画处理
 @objc extension ZSTabView {
     
-    open func sliderViewAnimation(to cell: UICollectionViewCell,
-                                  isHorizontal: Bool,
-                                  isAnimation: Bool) {
+    open func layoutSliderView(to cell: UICollectionViewCell,
+                               isHorizontal: Bool) -> CGFloat {
         
         var sliderOffset: CGFloat = 0
         
@@ -169,6 +179,30 @@ import UIKit
             break
         }
         
+        return sliderOffset
+    }
+    
+    open func sliderMove(offset: CGFloat,
+                         isHorizontal: Bool) {
+        
+        if isHorizontal
+        {
+            sliderView.frame.origin.x = offset
+        }
+        else
+        {
+            sliderView.frame.origin.y = offset
+        }
+    }
+    
+    open func sliderViewAnimation(to index: Int,
+                                  cell: UICollectionViewCell,
+                                  isHorizontal: Bool,
+                                  isAnimation: Bool,
+                                  completion: ((Bool) -> Void)? = nil) {
+        
+        let sliderOffset: CGFloat = layoutSliderView(to: cell, isHorizontal: isHorizontal)
+        
         if sliderView.superview == nil
         {
             insertSubview(sliderView, at: 0)
@@ -177,33 +211,50 @@ import UIKit
         // SliderView 动画
         if !isAnimation
         {
-            if isHorizontal
-            {
-                sliderView.frame.origin.x = sliderOffset
-            }
-            else
-            {
-                sliderView.frame.origin.y = sliderOffset
-            }
+            completion?(true)
+            sliderMove(offset: sliderOffset, isHorizontal: isHorizontal)
             isUserInteractionEnabled = true
         }
         else
         {
+            switch sliderAnimation {
+                
+            case .Default,
+                 .Together:
+                
+                if abs(index - selectIndex) > 1
+                {
+                    selectIndex = index
+                    sliderView.alpha = 0;
+                    completion?(true)
+                    sliderMove(offset: sliderOffset, isHorizontal: isHorizontal)
+                    sliderView.layoutIfNeeded()
+                    
+                    UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                        
+                        self?.sliderView.alpha = 1
+                        
+                    }) { [weak self] (finished) in
+                        
+                        self?.isUserInteractionEnabled = true
+                    }
+                    return
+                }
+                
+            default:
+                break
+            }
+            
+            selectIndex = index
             sliderView.layoutIfNeeded()
             UIView.animate(withDuration: 0.25, animations: { [weak self] in
-                
-                if isHorizontal
-                {
-                    self?.sliderView.frame.origin.x = sliderOffset
-                }
-                else
-                {
-                    self?.sliderView.frame.origin.y = sliderOffset
-                }
-                
+            
+            self?.sliderMove(offset: sliderOffset, isHorizontal: isHorizontal)
+            
             }) { [weak self] (finished) in
                 
                 self?.isUserInteractionEnabled = true
+                completion?(finished)
             }
         }
     }
@@ -246,26 +297,35 @@ import UIKit
         let cellCenter = isHorizontal ? cell.center.x : cell.center.y
         let centerContentOffset = cellCenter - (isHorizontal ? center.x : center.y)
         
-        // CollectionView 滚动动画
+        var point: CGPoint = .zero
+        
         if contentOffset.x >= min
         {
             if centerContentOffset > max
             {
-                let point = isHorizontal ? CGPoint(x: max, y: 0) : CGPoint(x: 0, y: max)
-                setContentOffset(point, animated: isAnimation)
+                point = isHorizontal ? CGPoint(x: max, y: 0) : CGPoint(x: 0, y: max)
             }
             else if centerContentOffset > 0
             {
-                let point = isHorizontal ? CGPoint(x: centerContentOffset, y: 0) : CGPoint(x: 0, y: centerContentOffset)
-                setContentOffset(point, animated: isAnimation)
-            }
-            else
-            {
-                setContentOffset(.zero, animated: isAnimation)
+                point = isHorizontal ? CGPoint(x: centerContentOffset, y: 0) : CGPoint(x: 0, y: centerContentOffset)
             }
         }
         
-        sliderViewAnimation(to: cell, isHorizontal: isHorizontal, isAnimation: isAnimation)
+        switch sliderAnimation
+        {
+        case .Default, .KeepSlide:
+            sliderViewAnimation(to: index, cell: cell, isHorizontal: isHorizontal, isAnimation: isAnimation) { [weak self] (finished) in
+                
+                self?.setContentOffset(point, animated: isAnimation)
+            }
+            break
+        case .Together, .KeepTogetherSlide:
+            setContentOffset(point, animated: isAnimation)
+            sliderViewAnimation(to: index, cell: cell, isHorizontal: isHorizontal, isAnimation: isAnimation)
+            break
+        default:
+            break;
+        }
         
         reloadData()
     }

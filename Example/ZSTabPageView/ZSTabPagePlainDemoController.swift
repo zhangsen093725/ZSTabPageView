@@ -120,7 +120,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
             addChild(controller)
         }
         
-        controller.scrollToTop = contentServe.zs_tabPageTablePlainViewContentViewDidScroll()
+        controller.scrollToTop = contentServe.zs_tabPagePlainContentScrollViewDidScroll()
         controller.didMove(toParent: self)
         return controller.view
     }

@@ -113,7 +113,7 @@ import UIKit
         pageViewServe.scrollDelegate = self
     }
     
-    open func zs_tabPageTablePlainViewContentViewDidScroll() -> (_ scrollView: UIScrollView, _ currentOffset: CGPoint) -> CGPoint {
+    open func zs_tabPagePlainContentScrollViewDidScroll() -> (_ scrollView: UIScrollView, _ currentOffset: CGPoint) -> CGPoint {
         
         return { [weak self] (scrollView, currentOffset) in
             

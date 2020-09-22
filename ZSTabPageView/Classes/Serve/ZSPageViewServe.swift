@@ -82,8 +82,15 @@ import UIKit
     open func zs_setSelectedIndex(_ index: Int) {
         
         guard tabCount > 0 else { return }
-        let _index = index > 0 ? index : 0
-        _selectIndex_ = _index < tabCount ? _index : tabCount - 1
+        
+        var _index = index > 0 ? index : 0
+        _index = _index < tabCount ? _index : tabCount - 1
+        
+        delegate?.zs_pageViewWillAppear(at: _index)
+        delegate?.zs_pageViewWillDisappear(at: selectIndex)
+        
+        _selectIndex_ = _index
+        
         guard collectionViewScrollToIndexEnable else { return }
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
     }
@@ -175,13 +182,6 @@ import UIKit
         {
            page = Int(scrollView.contentOffset.y / scrollView.frame.height + 0.5)
         }
-        
-        if selectIndex != page && page < tabCount
-        {
-            delegate?.zs_pageViewWillAppear(at: page)
-            delegate?.zs_pageViewWillDisappear(at: selectIndex)
-        }
-        
         scrollDelegate?.zs_pageViewDidScroll(scrollView, page: page)
     }
     

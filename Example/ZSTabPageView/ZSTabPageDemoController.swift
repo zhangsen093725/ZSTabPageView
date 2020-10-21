@@ -28,7 +28,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     
     lazy var tabPageServe: ZSTabPageViewServe = {
         
-        let tabPageServe = ZSTabPageViewServe(selectIndex: 5)
+        let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
         tabPageServe.tabViewServe.tabViewInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -62,16 +62,20 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     // TODO: ZSPageViewServeDelegate
     func zs_pageView(at index: Int) -> UIView {
         
-        var controller: UIViewController!
-        if (index < children.count)
-        {
-            controller = children[index]
-        }
-        else
-        {
-            controller = TableViewController()
-           addChild(controller)
-        }
+        print("zs_pageView")
+        
+        let controller = TableViewController()
+//        if (index < children.count)
+//        {
+//            controller = children[index]
+//        }
+//        else
+//        {
+//            controller = TableViewController()
+//
+//        }
+        
+        addChild(controller)
         controller.didMove(toParent: self)
         return controller.view
     }

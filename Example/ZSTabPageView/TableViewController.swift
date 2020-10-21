@@ -10,6 +10,8 @@ import UIKit
 
 class TableViewController: UITableViewController {
 
+    var count: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,6 +25,12 @@ class TableViewController: UITableViewController {
             tableView.contentInsetAdjustmentBehavior = .never
         } else {
             // Fallback on earlier versions
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            
+            self.count = 100
+            self.tableView.reloadData()
         }
     }
     
@@ -46,7 +54,7 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 100
+        return count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -57,7 +65,7 @@ class TableViewController: UITableViewController {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "CELL")
         }
         
-        cell?.textLabel?.text = "askdjlas"
+        cell?.textLabel?.text = String(format:"%p", self)
         
         return cell!
     }

@@ -45,7 +45,7 @@ import UIKit
         super.init()
     }
     
-    public convenience init(selectIndex: Int) {
+    public convenience init(selectIndex: Int = 0) {
         self.init()
         _selectIndex_ = selectIndex
         tabViewServe = ZSTabViewServe(selectIndex: selectIndex)

@@ -48,8 +48,6 @@ import UIKit
     public var tabCount: Int = 0 {
         didSet {
             collectionView?.reloadData()
-            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
-            collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         }
     }
     
@@ -76,7 +74,7 @@ import UIKit
         super.init()
     }
     
-    public convenience init(selectIndex: Int) {
+    public convenience init(selectIndex: Int = 0) {
         self.init()
         _selectIndex_ = selectIndex
     }

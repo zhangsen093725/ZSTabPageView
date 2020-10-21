@@ -41,9 +41,6 @@ import UIKit
 
 @objcMembers open class ZSPageViewServe: NSObject, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    /// UICollectionView 是否允许ScrollToIndex
-    fileprivate var collectionViewScrollToIndexEnable: Bool = true
-    
     public weak var collectionView: ZSPageView? {
         
         didSet {
@@ -59,25 +56,97 @@ import UIKit
     /// tab count
     public var tabCount: Int = 0 {
         didSet {
+            clearCache()
             collectionView?.reloadData()
-            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
-            collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         }
     }
     
-    private var _selectIndex_: Int = 0
+    /// UICollectionView 是否允许ScrollToIndex
+    fileprivate var collectionViewScrollToIndexEnable: Bool = true
+    
+    private var displayLink: _ZSPageViewServeDisplayLink?
+    
+    private var cellContentCacheViewMap: [Int : UIView] = [:]
     
     private override init() {
         super.init()
     }
     
-    public convenience init(selectIndex: Int) {
+    public convenience init(selectIndex: Int = 0) {
         self.init()
         _selectIndex_ = selectIndex
     }
     
     /// 当前选择的 tab 索引
+    private var _selectIndex_: Int = 0
+    {
+        willSet
+        {
+            delegate?.zs_pageViewWillAppear(at: newValue)
+            delegate?.zs_pageViewWillDisappear(at: newValue)
+        }
+    }
+    /// 当前选择的 tab 索引
     public var selectIndex: Int { return _selectIndex_ }
+    
+    private var displayLinkCount: Int = 8
+    
+    private func startDisplayLink() {
+
+        guard displayLink == nil else { return }
+        
+        displayLink = _ZSPageViewServeDisplayLink(fps: 60, block: { [weak self] (displayLink) in
+            
+            self?.runDisplayLink()
+        })
+    }
+    
+    private func runDisplayLink() {
+        displayLinkCount -= 1
+        
+        if displayLinkCount <= 0
+        {
+            zs_showCellContentCacheView()
+            stopDisplayLink()
+        }
+    }
+    
+    private func stopDisplayLink() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+    
+    private func zs_showCellContentCacheView() {
+        
+        guard let cell = collectionView?.cellForItem(at: IndexPath(row: selectIndex, section: 0)) else { return }
+        
+        var view = cellContentCacheViewMap[selectIndex]
+        
+        if view == nil
+        {
+            view = delegate?.zs_pageView(at: selectIndex)
+            cellContentCacheViewMap[selectIndex] = view
+            cell.contentView.addSubview(view!)
+            view!.frame = cell.contentView.bounds
+        }
+    }
+    
+    deinit {
+        collectionView?.removeObserver(self, forKeyPath: "frame")
+    }
+}
+
+
+
+/**
+ *  ZSPageViewServe 提供外部重写的方法
+ */
+@objc extension ZSPageViewServe {
+    
+    /// 清除PageView的缓存
+    open func clearCache() {
+        cellContentCacheViewMap.removeAll()
+    }
     
     open func zs_setSelectedIndex(_ index: Int) {
         
@@ -86,13 +155,13 @@ import UIKit
         var _index = index > 0 ? index : 0
         _index = _index < tabCount ? _index : tabCount - 1
         
-        delegate?.zs_pageViewWillAppear(at: _index)
-        delegate?.zs_pageViewWillDisappear(at: selectIndex)
-        
         _selectIndex_ = _index
         
         guard collectionViewScrollToIndexEnable else { return }
+        
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
+        collectionView?.layoutIfNeeded()
+        startDisplayLink()
     }
     
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -108,10 +177,6 @@ import UIKit
             
             zs_setSelectedIndex(selectIndex)
         }
-    }
-    
-    deinit {
-        collectionView?.removeObserver(self, forKeyPath: "frame")
     }
 }
 
@@ -140,15 +205,14 @@ import UIKit
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath)
         
         cell.isExclusiveTouch = true
-        
-        for subView in cell.contentView.subviews {
-            
+
+        for subView in cell.contentView.subviews
+        {
+            subView.isHidden = true
             subView.removeFromSuperview()
         }
         
-        guard let view = delegate?.zs_pageView(at: indexPath.item) else {
-            return cell
-        }
+        guard let view = cellContentCacheViewMap[indexPath.item] else { return cell }
         
         cell.contentView.addSubview(view)
         view.frame = cell.contentView.bounds
@@ -186,11 +250,14 @@ import UIKit
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        stopDisplayLink()
+        displayLinkCount = 8
         collectionViewScrollToIndexEnable = false
         scrollDelegate?.zs_pageViewWillBeginDecelerating?(scrollView)
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        startDisplayLink()
         collectionViewScrollToIndexEnable = true
         scrollDelegate?.zs_pageViewDidEndDecelerating?(scrollView)
     }
@@ -220,5 +287,51 @@ import UIKit
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         
         return 0
+    }
+}
+
+
+
+fileprivate class _ZSPageViewServeDisplayLink: NSObject {
+    
+    private var userInfo: ((_ displayLink: CADisplayLink) -> Void)?
+    private var displayLink: CADisplayLink?
+    
+    private override init() {
+        super.init()
+    }
+    
+    /// 初始化CADisplayLink
+    /// - Parameters:
+    ///   - fps: 刷新频率，表示一秒钟刷新多少次，默认是60次
+    ///   - block: 回调
+    public convenience init(fps: Int = 60,
+                            block: @escaping (_ displayLink: CADisplayLink) -> Void) {
+        
+        self.init()
+        
+        userInfo = block
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(runDisplayLink(_:)))
+        
+        if #available(iOS 10.0, *) {
+            displayLink?.preferredFramesPerSecond = fps
+        } else {
+            displayLink?.frameInterval = fps
+        }
+        displayLink?.add(to: RunLoop.current, forMode: .default)
+    }
+    
+    @objc private func runDisplayLink(_ displayLink: CADisplayLink) -> Void {
+        
+        guard userInfo != nil else { return }
+        userInfo!(displayLink)
+    }
+    
+    public func invalidate() {
+        displayLink?.remove(from: RunLoop.current, forMode: .default)
+        displayLink?.invalidate()
+        displayLink = nil
+        userInfo = nil
     }
 }

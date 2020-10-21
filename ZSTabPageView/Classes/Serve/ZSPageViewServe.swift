@@ -215,6 +215,7 @@ import UIKit
         guard let view = cellContentCacheViewMap[indexPath.item] else { return cell }
         
         cell.contentView.addSubview(view)
+        view.isHidden = false
         view.frame = cell.contentView.bounds
         
         return cell

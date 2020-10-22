@@ -58,6 +58,7 @@ import UIKit
         didSet {
             clearCache()
             collectionView?.reloadData()
+            zs_setSelectedIndex(selectIndex)
         }
     }
     
@@ -89,6 +90,7 @@ import UIKit
     /// 当前选择的 tab 索引
     public var selectIndex: Int { return _selectIndex_ }
     
+    private let _displayLinkCount: Int = 8
     private var displayLinkCount: Int = 8
     
     private func startDisplayLink() {
@@ -161,6 +163,9 @@ import UIKit
         
         collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
         collectionView?.layoutIfNeeded()
+        
+        stopDisplayLink()
+        displayLinkCount = _displayLinkCount
         startDisplayLink()
     }
     
@@ -252,7 +257,7 @@ import UIKit
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         stopDisplayLink()
-        displayLinkCount = 8
+        displayLinkCount = _displayLinkCount
         collectionViewScrollToIndexEnable = false
         scrollDelegate?.zs_pageViewWillBeginDecelerating?(scrollView)
     }

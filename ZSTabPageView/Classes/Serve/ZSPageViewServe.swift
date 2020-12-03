@@ -30,6 +30,11 @@ import UIKit
     ///   - page: 当前的页码
     func zs_pageViewDidScroll(_ scrollView: UIScrollView, page: Int)
     
+    /// scrollView 滚动的回调
+    /// - Parameters:
+    ///   - scrollView: 当前滚动的ScrollView
+    @objc optional func zs_pageViewDidScroll(_ scrollView: UIScrollView)
+    
     /// page 将要滚动，手指放上
     /// - Parameter scrollView: 当前滚动的ScrollView
     @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
@@ -237,6 +242,8 @@ import UIKit
     
     // TODO: UIScrollViewDelegate
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        scrollDelegate?.zs_pageViewDidScroll?(scrollView)
         
         let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
         

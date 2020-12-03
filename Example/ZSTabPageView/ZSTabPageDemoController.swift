@@ -18,6 +18,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         tabPageView.tabView.sliderView.backgroundColor = .clear
         tabPageView.tabView.sliderLength = 24
         tabPageView.tabView.sliderWidth = 14
+        tabPageView.tabView.sliderAnimation = .KeepTogetherSlide
         tabPageView.tabView.sliderVerticalAlignment = .Bottom
         tabPageView.tabView.sliderHorizontalAlignment = .Right
         tabPageView.tabView.sliderInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0);
@@ -65,15 +66,6 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         print("zs_pageView")
         
         let controller = TableViewController()
-//        if (index < children.count)
-//        {
-//            controller = children[index]
-//        }
-//        else
-//        {
-//            controller = TableViewController()
-//
-//        }
         
         addChild(controller)
         controller.didMove(toParent: self)

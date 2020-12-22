@@ -18,9 +18,9 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         tabPageView.tabView.sliderView.backgroundColor = .clear
         tabPageView.tabView.sliderLength = 24
         tabPageView.tabView.sliderWidth = 14
-        tabPageView.tabView.sliderAnimation = .KeepTogetherSlide
-        tabPageView.tabView.sliderVerticalAlignment = .Bottom
-        tabPageView.tabView.sliderHorizontalAlignment = .Right
+        tabPageView.tabView.sliderAnimation = .synchronize
+        tabPageView.tabView.sliderVerticalAlignment = .bottom
+        tabPageView.tabView.sliderHorizontalAlignment = .right
         tabPageView.tabView.sliderInset = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0);
         tabPageView.tabView.isSliderHidden = false
         view.addSubview(tabPageView)

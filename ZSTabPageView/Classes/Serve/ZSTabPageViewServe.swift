@@ -19,24 +19,29 @@ import UIKit
     public weak var tabPageView: ZSTabPageView?
     
     public weak var delegate: ZSPageViewServeDelegate? {
+        
         didSet {
             pageViewServe.delegate = delegate
         }
     }
     
     public weak var dataSource: ZSTabViewServeDataSource? {
+        
         didSet {
             tabViewServe.dataSource = dataSource
         }
     }
     
     public var tabCount: Int = 0 {
+        
         didSet {
             _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
             tabViewServe.tabCount = tabCount
             pageViewServe.tabCount = tabCount
         }
     }
+    
+    
     
     /// 当前选中的 TabPage 索引
     private var _selectIndex_: Int = 0
@@ -97,9 +102,10 @@ import UIKit
 @objc extension ZSTabPageViewServe {
     
     // TODO: ZSPageViewScrollDelegate
-    open func zs_pageViewDidScroll(_ scrollView: UIScrollView, page: Int) {
+    open func zs_pageView(scrollView: UIScrollView, didChange page: Int) {
         
-        if selectIndex != page && page < tabCount {
+        if page < tabCount
+        {
             zs_setSelectedIndex(page)
         }
     }

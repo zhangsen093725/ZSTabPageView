@@ -11,18 +11,19 @@ import ZSTabPageView
 
 class ZSTabCategoryDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabViewServeDataSource {
 
-    lazy var tabPageView: ZSTabCategoryView = {
+    lazy var tabPageView: ZSTabPageView = {
         
-        let tabPageView = ZSTabCategoryView()
+        let tabPageView = ZSTabPageView(scrollDirection: .vertical)
         tabPageView.tabView.sliderLength = 20
         tabPageView.tabView.isSliderHidden = false
+        tabPageView.tabViewHeight = 88
         view.addSubview(tabPageView)
         return tabPageView
     }()
     
-    lazy var tabPageServe: ZSTabCategoryViewServe = {
+    lazy var tabPageServe: ZSTabPageViewServe = {
         
-        let tabPageServe = ZSTabCategoryViewServe(selectIndex: 0)
+        let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
         tabPageServe.tabViewServe.minimumSpacing = 18

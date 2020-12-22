@@ -1,5 +1,5 @@
 PODS:
-  - ZSTabPageView (0.1.8)
+  - ZSTabPageView (0.3.3)
   - ZSViewUtil (0.6.4):
     - ZSViewUtil/All (= 0.6.4)
   - ZSViewUtil/All (0.6.4)
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZSTabPageView: 9afedd3bc2c699f0c70b32db3c4127af04270dd4
+  ZSTabPageView: 6fe5fda27c783ac4c2439504ef76ce11c226786d
   ZSViewUtil: 62539f68c570cd5648ea4e18386b2a3b9cdbd41c
 
 PODFILE CHECKSUM: 1cbbbd6cae88c2c1fa320723256ba697983f25ae

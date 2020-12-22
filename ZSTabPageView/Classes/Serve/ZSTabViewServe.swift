@@ -49,7 +49,7 @@ import UIKit
         didSet {
             collectionView?.reloadData()
             _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
-            collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
+            collectionView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
         }
     }
     
@@ -86,7 +86,7 @@ import UIKit
         guard tabCount > 0 else { return }
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
-        collectionView?.beginScrollToIndex(selectIndex, isAnimation: true)
+        collectionView?.zs_setSelectedIndex(selectIndex, isAnimation: true)
     }
     
     public func zs_bind(collectionView: ZSTabView, register cellClass: ZSTabCell.Type) {

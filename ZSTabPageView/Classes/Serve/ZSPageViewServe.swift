@@ -24,22 +24,22 @@ import UIKit
 
 @objc public protocol ZSPageViewScrollDelegate {
     
-    /// page 滚动的回调
+    /// page 滚动结束的回调
     /// - Parameters:
     ///   - scrollView: 当前滚动的ScrollView
     ///   - page: 当前的页码
-    func zs_pageViewDidScroll(_ scrollView: UIScrollView, page: Int)
+    func zs_pageView(scrollView: UIScrollView, didChange page: Int)
     
     /// scrollView 滚动的回调
     /// - Parameters:
     ///   - scrollView: 当前滚动的ScrollView
     @objc optional func zs_pageViewDidScroll(_ scrollView: UIScrollView)
     
-    /// page 将要滚动，手指放上
+    /// scrollView 将要滚动，手指放上
     /// - Parameter scrollView: 当前滚动的ScrollView
     @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
     
-    /// page 滚动结束，手指离开
+    /// scrollView 滚动结束，手指离开
     /// - Parameter scrollView: 当前滚动的ScrollView
     @objc optional func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
 }
@@ -259,7 +259,10 @@ import UIKit
         {
            page = Int(scrollView.contentOffset.y / scrollView.frame.height + 0.5)
         }
-        scrollDelegate?.zs_pageViewDidScroll(scrollView, page: page)
+        
+        guard selectIndex != page else { return }
+        
+        scrollDelegate?.zs_pageView(scrollView: scrollView, didChange: page)
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {

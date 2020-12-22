@@ -10,19 +10,11 @@ import UIKit
 import ZSTabPageView
 import ZSViewUtil
 
-class TableBaseView: UITableView, UIGestureRecognizerDelegate {
-    
-    // TODO: UIGestureRecognizerDelegate
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-}
-
 class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabViewServeDataSource {
     
-    public lazy var tableView: TableBaseView = {
+    public lazy var tableView: ZSTabSectionPageTableView = {
         
-        let tableView = TableBaseView(frame: .zero, style: .plain)
+        let tableView = ZSTabSectionPageTableView(frame: .zero, style: .plain)
         if #available(iOS 11.0, *) {
             tableView.contentInsetAdjustmentBehavior = .never
         } else {
@@ -40,9 +32,9 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         return tableView
     }()
     
-    lazy var contentServe: ZSTabPageTablePlainViewServe = {
+    lazy var contentServe: ZSTabSectionPageTableViewServe = {
         
-        let contentServe = ZSTabPageTablePlainViewServe(selectIndex: -1)
+        let contentServe = ZSTabSectionPageTableViewServe(selectIndex: -1)
         contentServe.delegate = self
         contentServe.dataSource = self
         contentServe.isSectionFloatEnable = true
@@ -91,7 +83,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = .white
         
-        contentServe.zs_bindTableView(tableView, tabView: tabView, pageView: pageView)
+        contentServe.zs_bind(tableView: tableView, tabView: tabView, pageView: pageView)
         contentServe.tabCount = self.tabTexts.count
     }
     

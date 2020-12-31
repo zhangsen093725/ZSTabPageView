@@ -23,7 +23,7 @@ class ZSTabCategoryDemoController: UIViewController, ZSPageViewServeDelegate, ZS
     
     lazy var tabPageServe: ZSTabPageViewServe = {
         
-        let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
+        let tabPageServe = ZSTabPageViewServe(selectIndex: 0, bind: tabPageView)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
         tabPageServe.tabViewServe.minimumSpacing = 18
@@ -36,7 +36,6 @@ class ZSTabCategoryDemoController: UIViewController, ZSPageViewServeDelegate, ZS
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
         
-        tabPageServe.zs_bindTabView(tabPageView)
         tabPageServe.tabCount = tabTexts.count
     }
     
@@ -81,9 +80,9 @@ class ZSTabCategoryDemoController: UIViewController, ZSPageViewServeDelegate, ZS
         return CGSize(width: 30, height: 64 + index * 10)
     }
     
-    func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int) {
+    func zs_configTabCell(_ cell: ZSTabCollectionViewCell, forItemAt index: Int) {
         
-        let textCell = cell as? ZSTabTextCell
+        let textCell = cell as? ZSTabLabelCollectionViewCell
         
         let isSelected: Bool = (index == tabPageServe.selectIndex)
         

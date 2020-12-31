@@ -1,5 +1,5 @@
 //
-//  ZSTabCell.swift
+//  ZSTabCollectionViewCell.swift
 //  ZSTabPageView
 //
 //  Created by 张森 on 2020/1/13.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objcMembers open class ZSTabTextCell: ZSTabCell {
+@objcMembers open class ZSTabLabelCollectionViewCell: ZSTabCollectionViewCell {
     
     public lazy var titleLabel: UILabel = {
         

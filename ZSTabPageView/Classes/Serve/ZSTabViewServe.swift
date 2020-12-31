@@ -25,20 +25,40 @@ import UIKit
     /// - Parameters:
     ///   - cell: 当前的Cell
     ///   - index: 当前Cell的索引
-    @objc func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int)
+    @objc func zs_configTabCell(_ cell: ZSTabCollectionViewCell, forItemAt index: Int)
 }
 
 @objcMembers open class ZSTabViewServe: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    public weak var collectionView: ZSTabView? {
+    private override init() {
+        super.init()
+    }
+    
+    public convenience init(selectIndex: Int = 0,
+                            bind tabView: ZSTabView,
+                            register tabCellClass: ZSTabCollectionViewCell.Type) {
+        self.init()
+        _selectIndex_ = selectIndex
         
+        tabView.delegate = self
+        tabView.dataSource = self
+        
+        tabView.register(tabCellClass, forCellWithReuseIdentifier: tabCellClass.zs_identifier)
+        tabView.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
+        
+        self.tabView = tabView
+        self.cellClass = tabCellClass
+    }
+    
+    public weak var tabView: ZSTabView? {
+
         didSet {
             oldValue?.removeObserver(self, forKeyPath: "frame")
-            collectionView?.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
+            tabView?.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
         }
     }
     
-    public var cellClass: ZSTabCell.Type = ZSTabCell.self
+    public var cellClass: ZSTabCollectionViewCell.Type = ZSTabCollectionViewCell.self
     
     public weak var delegate: ZSTabViewServeDelegate?
     
@@ -46,66 +66,48 @@ import UIKit
     
     /// tab count
     public var tabCount: Int = 0 {
+        
         didSet {
-            collectionView?.reloadData()
+            tabView?.reloadData()
             _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
-            collectionView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
+            tabView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
         }
     }
     
     /// tab 之间的间隙
     public var minimumSpacing: CGFloat = 8 {
+        
         didSet {
-            collectionView?.reloadData()
+            tabView?.reloadData()
         }
     }
     
     /// tab insert
     public var tabViewInset: UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) {
+        
         didSet {
-            collectionView?.reloadData()
+            tabView?.reloadData()
         }
     }
     
-    private var _selectIndex_: Int = 0
-    
     /// 当前选择的 tab 索引
     public var selectIndex: Int { return _selectIndex_ }
-    
-    private override init() {
-        super.init()
-    }
-    
-    public convenience init(selectIndex: Int = 0) {
-        self.init()
-        _selectIndex_ = selectIndex
-    }
+    private var _selectIndex_: Int = 0
     
     open func zs_setSelectedIndex(_ index: Int) {
         
         guard tabCount > 0 else { return }
+        
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
-        collectionView?.zs_setSelectedIndex(selectIndex, isAnimation: true)
-    }
-    
-    public func zs_bind(collectionView: ZSTabView, register cellClass: ZSTabCell.Type) {
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        collectionView.register(cellClass, forCellWithReuseIdentifier: cellClass.zs_identifier)
-        
-        self.collectionView = collectionView
-        
-        self.cellClass = cellClass
+        tabView?.zs_setSelectedIndex(selectIndex, isAnimation: true)
     }
     
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         guard let _object = (object as? ZSTabView) else { return }
         
-        if _object == collectionView
+        if _object == tabView
         {
             let new = change?[.newKey] as? CGRect
             let old = change?[.oldKey] as? CGRect
@@ -117,7 +119,7 @@ import UIKit
     }
     
     deinit {
-        collectionView?.removeObserver(self, forKeyPath: "frame")
+        tabView = nil
     }
 }
 
@@ -137,7 +139,7 @@ import UIKit
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellClass.zs_identifier, for: indexPath) as! ZSTabCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellClass.zs_identifier, for: indexPath) as! ZSTabCollectionViewCell
         
         dataSource?.zs_configTabCell(cell, forItemAt: indexPath.item)
         

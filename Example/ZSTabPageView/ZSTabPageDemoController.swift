@@ -29,7 +29,7 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
     
     lazy var tabPageServe: ZSTabPageViewServe = {
         
-        let tabPageServe = ZSTabPageViewServe(selectIndex: 0)
+        let tabPageServe = ZSTabPageViewServe(selectIndex: 0, bind: tabPageView, register: ZSTabLabelCollectionViewCell.self)
         tabPageServe.delegate = self
         tabPageServe.dataSource = self
         tabPageServe.tabViewServe.tabViewInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
@@ -43,7 +43,6 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
         
-        tabPageServe.zs_bindTabView(tabPageView)
 //        self.tabPageServe.tabCount = 3
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -88,9 +87,9 @@ class ZSTabPageDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabV
         return CGSize(width: 30 + index * 10, height: 20)
     }
     
-    func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int) {
+    func zs_configTabCell(_ cell: ZSTabCollectionViewCell, forItemAt index: Int) {
         
-        let textCell = cell as? ZSTabTextCell
+        let textCell = cell as? ZSTabLabelCollectionViewCell
         
         let isSelected: Bool = (index == tabPageServe.selectIndex)
         

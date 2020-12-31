@@ -9,6 +9,25 @@ import UIKit
 
 @objcMembers open class ZSTabSectionPageTableViewServe: ZSTabSectionPageServe, UITableViewDelegate, UITableViewDataSource {
     
+    public convenience init(selectIndex: Int = 0,
+                           bind tableView: ZSTabSectionPageTableView,
+                           tabView: ZSTabView,
+                           pageView: ZSPageView,
+                           register tabCellClass: ZSTabCollectionViewCell.Type = ZSTabLabelCollectionViewCell.self) {
+        
+        self.init()
+        
+        zs_setSelectedIndex(selectIndex)
+        
+        zs_bind(tabView: tabView, register: tabCellClass)
+        zs_bind(pageView: pageView)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        zs_config(tableView: tableView)
+        self.baseTableView = tableView
+    }
+    
     public weak var baseTableView: ZSTabSectionPageTableView?
     
     /// tabView的高度
@@ -24,31 +43,8 @@ import UIKit
             baseTableView?.reloadData()
         }
     }
-}
-
-
-
-/**
- * 1. ZSTabSectionViewServe 提供外部重写的方法
- * 2. 需要自定义TabContentView的样式，可重新以下的方法达到目的
- */
-@objc extension ZSTabSectionPageTableViewServe {
     
-    open func zs_bind(tableView: ZSTabSectionPageTableView,
-                               tabView: ZSTabView,
-                               pageView: ZSPageView,
-                               tabCellClass: ZSTabCell.Type = ZSTabTextCell.self) {
-        
-        zs_config(tableView: tableView)
-        zs_configTabViewServe(tabView, tabCellClass: tabCellClass)
-        zs_configPageServe(pageView)
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        self.baseTableView = tableView
-    }
-    
-    open func zs_config(tableView: UITableView) {
+    open func zs_config(tableView: ZSTabSectionPageTableView) {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
     }
@@ -67,23 +63,23 @@ import UIKit
         
         guard scrollView.contentSize != .zero else { return }
         
-        let bottomOffset = scrollView.contentSize.height - scrollView.bounds.height
+        let offset = scrollView.contentSize.height - scrollView.bounds.height
         
         if isSectionFloatEnable == false
         {
-            if scrollView.contentOffset.y <= bottomOffset - tabViewHeight && scrollView.contentOffset.y >= 0
+            if scrollView.contentOffset.y <= offset && scrollView.contentOffset.y >= 0
             {
                 scrollView.contentInset = UIEdgeInsets(top: -scrollView.contentOffset.y, left: 0, bottom: 0, right: 0)
             }
-            else if scrollView.contentOffset.y >= bottomOffset - tabViewHeight
+            else if scrollView.contentOffset.y >= offset
             {
-                scrollView.contentInset = UIEdgeInsets(top: -(bottomOffset - tabViewHeight), left: 0, bottom: 0, right: 0);
+                scrollView.contentInset = UIEdgeInsets(top: -offset, left: 0, bottom: 0, right: 0);
             }
         }
         
-        if scrollView.contentOffset.y >= bottomOffset
+        if scrollView.contentOffset.y >= offset
         {
-            scrollView.contentOffset = CGPoint(x: 0, y: bottomOffset)
+            scrollView.contentOffset = CGPoint(x: 0, y: offset)
             if isShouldBaseScroll
             {
                 isShouldBaseScroll = false
@@ -94,7 +90,7 @@ import UIKit
         
         if isShouldBaseScroll == false
         {
-            scrollView.contentOffset = CGPoint(x: 0, y: bottomOffset)
+            scrollView.contentOffset = CGPoint(x: 0, y: offset)
             return
         }
     }
@@ -121,7 +117,7 @@ import UIKit
             subView.removeFromSuperview()
         }
         
-        guard let view = pageViewServe.collectionView else
+        guard let view = pageViewServe?.pageView else
         {
             return cell
         }
@@ -134,12 +130,12 @@ import UIKit
     
     open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return tableView.frame.size.height - tabViewHeight
+        return tableView.frame.size.height - (isSectionFloatEnable ? tabViewHeight : 0)
     }
     
     open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        guard let view = tabViewServe.collectionView else { return nil }
+        guard let view = tabViewServe?.tabView else { return nil }
         return view
     }
     

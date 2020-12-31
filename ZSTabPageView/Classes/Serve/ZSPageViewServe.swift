@@ -28,7 +28,7 @@ import UIKit
     /// - Parameters:
     ///   - scrollView: 当前滚动的ScrollView
     ///   - page: 当前的页码
-    func zs_pageView(scrollView: UIScrollView, didChange page: Int)
+    func zs_pageView(scrollView: UIScrollView, didChange index: Int)
     
     /// scrollView 滚动的回调
     /// - Parameters:
@@ -46,43 +46,35 @@ import UIKit
 
 @objcMembers open class ZSPageViewServe: NSObject, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    public weak var collectionView: ZSPageView? {
-        
-        didSet {
-            oldValue?.removeObserver(self, forKeyPath: "frame")
-            collectionView?.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
-        }
-    }
-    
-    weak var delegate: ZSPageViewServeDelegate?
-    
-    public weak var scrollDelegate: ZSPageViewScrollDelegate?
-    
-    /// tab count
-    public var tabCount: Int = 0 {
-        didSet {
-            clearCache()
-            collectionView?.reloadData()
-            zs_setSelectedIndex(selectIndex)
-        }
-    }
-    
-    /// UICollectionView 是否允许ScrollToIndex
-    fileprivate var collectionViewScrollToIndexEnable: Bool = true
-    
-    private var displayLink: _ZSPageViewServeDisplayLink?
-    
-    private var cellContentCacheViewMap: [Int : UIView] = [:]
-    
     private override init() {
         super.init()
     }
     
-    public convenience init(selectIndex: Int = 0) {
+    public convenience init(selectIndex: Int = 0,
+                            bind pageView: ZSPageView) {
         self.init()
         _selectIndex_ = selectIndex
+        
+        pageView.delegate = self
+        pageView.dataSource = self
+        pageView.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
+        
+        zs_config(pageView: pageView)
+        self.pageView = pageView
     }
     
+    public weak var pageView: ZSPageView?
+    {
+        didSet
+        {
+            oldValue?.removeObserver(self, forKeyPath: "frame")
+            pageView?.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
+        }
+    }
+    
+    
+    /// 当前选择的 tab 索引
+    public var selectIndex: Int { return _selectIndex_ }
     /// 当前选择的 tab 索引
     private var _selectIndex_: Int = 0
     {
@@ -92,11 +84,41 @@ import UIKit
             delegate?.zs_pageViewWillDisappear(at: newValue)
         }
     }
-    /// 当前选择的 tab 索引
-    public var selectIndex: Int { return _selectIndex_ }
     
+    weak var delegate: ZSPageViewServeDelegate?
+    
+    public weak var scrollDelegate: ZSPageViewScrollDelegate?
+    
+    /// tab count
+    public var pageCount: Int = 0
+    {
+        didSet
+        {
+            zs_clearCache()
+            pageView?.reloadData()
+            zs_setSelectedIndex(selectIndex)
+        }
+    }
+    
+    /// UICollectionView 是否允许ScrollToIndex
+    fileprivate var pageViewScrollToIndexEnable: Bool = true
+    
+    private var displayLink: _ZSPageViewServeDisplayLink?
     private let _displayLinkCount: Int = 8
     private var displayLinkCount: Int = 8
+    
+    private var cellContentCacheViewMap: [Int : UIView] = [:]
+    
+    deinit {
+        pageView = nil
+    }
+}
+
+
+/**
+ *  DisplayLink
+ */
+@objc extension ZSPageViewServe {
     
     private func startDisplayLink() {
 
@@ -125,7 +147,7 @@ import UIKit
     
     private func zs_showCellContentCacheView() {
         
-        guard let cell = collectionView?.cellForItem(at: IndexPath(row: selectIndex, section: 0)) else { return }
+        guard let cell = pageView?.cellForItem(at: IndexPath(row: selectIndex, section: 0)) else { return }
         
         var view = cellContentCacheViewMap[selectIndex]
         
@@ -137,10 +159,6 @@ import UIKit
             view!.frame = cell.contentView.bounds
         }
     }
-    
-    deinit {
-        collectionView?.removeObserver(self, forKeyPath: "frame")
-    }
 }
 
 
@@ -151,23 +169,28 @@ import UIKit
 @objc extension ZSPageViewServe {
     
     /// 清除PageView的缓存
-    open func clearCache() {
+    open func zs_clearCache() {
         cellContentCacheViewMap.removeAll()
+    }
+    
+    open func zs_config(pageView: ZSPageView) {
+        
+        pageView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
     }
     
     open func zs_setSelectedIndex(_ index: Int) {
         
-        guard tabCount > 0 else { return }
+        guard pageCount > 0 else { return }
         
         var _index = index > 0 ? index : 0
-        _index = _index < tabCount ? _index : tabCount - 1
+        _index = _index < pageCount ? _index : pageCount - 1
         
         _selectIndex_ = _index
         
-        guard collectionViewScrollToIndexEnable else { return }
+        guard pageViewScrollToIndexEnable else { return }
         
-        collectionView?.beginScrollToIndex(selectIndex, isAnimation: false)
-        collectionView?.layoutIfNeeded()
+        pageView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
+        pageView?.layoutIfNeeded()
         
         stopDisplayLink()
         displayLinkCount = _displayLinkCount
@@ -178,7 +201,7 @@ import UIKit
         
         guard let _object = (object as? ZSPageView) else { return }
         
-        if _object == collectionView
+        if _object == pageView
         {
             let new = change?[.newKey] as? CGRect
             let old = change?[.oldKey] as? CGRect
@@ -187,48 +210,6 @@ import UIKit
             
             zs_setSelectedIndex(selectIndex)
         }
-    }
-}
-
-
-
-/**
- * 1. ZSPageViewServe 提供外部重写的方法
- * 2. 需要自定义每个Tab Page的样式，可重新以下的方法达到目的
- */
-@objc extension ZSPageViewServe {
-    
-    open func zs_bindView(_ collectionView: ZSPageView) {
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        self.collectionView = collectionView
-        zs_configTabPageView()
-    }
-    
-    open func zs_configTabPageView() {
-        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
-    }
-    
-    open func zs_configTabPageCell(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath)
-        
-        cell.isExclusiveTouch = true
-
-        for subView in cell.contentView.subviews
-        {
-            subView.isHidden = true
-            subView.removeFromSuperview()
-        }
-        
-        guard let view = cellContentCacheViewMap[indexPath.item] else { return cell }
-        
-        cell.contentView.addSubview(view)
-        view.isHidden = false
-        view.frame = cell.contentView.bounds
-        
-        return cell
     }
 }
 
@@ -245,9 +226,9 @@ import UIKit
         
         scrollDelegate?.zs_pageViewDidScroll?(scrollView)
         
-        let flowLayout = collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+        let flowLayout = pageView?.collectionViewLayout as? UICollectionViewFlowLayout
         
-        guard collectionViewScrollToIndexEnable == false else { return }
+        guard pageViewScrollToIndexEnable == false else { return }
         
         var page: Int = 0
         
@@ -266,27 +247,45 @@ import UIKit
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        
         stopDisplayLink()
         displayLinkCount = _displayLinkCount
-        collectionViewScrollToIndexEnable = false
+        pageViewScrollToIndexEnable = false
         scrollDelegate?.zs_pageViewWillBeginDecelerating?(scrollView)
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
         startDisplayLink()
-        collectionViewScrollToIndexEnable = true
+        pageViewScrollToIndexEnable = true
         scrollDelegate?.zs_pageViewDidEndDecelerating?(scrollView)
     }
     
     // TODO: UICollectionViewDataSource
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return tabCount
+        return pageCount
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        return zs_configTabPageCell(collectionView, cellForItemAt: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath)
+        
+        cell.isExclusiveTouch = true
+
+        for subView in cell.contentView.subviews
+        {
+            subView.isHidden = true
+            subView.removeFromSuperview()
+        }
+        
+        guard let view = cellContentCacheViewMap[indexPath.item] else { return cell }
+        
+        cell.contentView.addSubview(view)
+        view.isHidden = false
+        view.frame = cell.contentView.bounds
+        
+        return cell
     }
     
     // TODO: UICollectionViewDelegateFlowLayout

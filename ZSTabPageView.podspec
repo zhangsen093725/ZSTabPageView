@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZSTabPageView'
-  s.version          = '0.3.4'
+  s.version          = '0.3.5'
   s.summary          = '标签和内容联动View'
 
 # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/zhangsen093725/ZSTabPageView'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   
-  s.author           = { 'zhangsen093725' => 'joshzhang@yntengyun.com' }
+  s.author           = { 'Josh' => '376019018@qq.com' }
   s.source           = { :git => 'https://github.com/zhangsen093725/ZSTabPageView.git', :tag => s.version.to_s }
 
   s.swift_version    = '5.0'

@@ -9,6 +9,25 @@ import UIKit
 
 @objcMembers open class ZSTabSectionPageCollectionViewServe: ZSTabSectionPageServe, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    public convenience init(selectIndex: Int = 0,
+                           bind collectionView: ZSTabSectionPageCollectionView,
+                           tabView: ZSTabView,
+                           pageView: ZSPageView,
+                           register tabCellClass: ZSTabCollectionViewCell.Type = ZSTabLabelCollectionViewCell.self) {
+        
+        self.init()
+        
+        zs_setSelectedIndex(selectIndex)
+        
+        zs_bind(tabView: tabView, register: tabCellClass)
+        zs_bind(pageView: pageView)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        zs_config(collectionView: collectionView)
+        self.baseCollectionView = collectionView
+    }
+    
     public weak var baseCollectionView: ZSTabSectionPageCollectionView?
     
     /// tabView的高度
@@ -35,28 +54,6 @@ import UIKit
             }
         }
     }
-}
-
-
-/**
- * 1. ZSTabSectionViewServe 提供外部重写的方法
- * 2. 需要自定义TabContentView的样式，可重新以下的方法达到目的
- */
-@objc extension ZSTabSectionPageCollectionViewServe {
-    
-    open func zs_bind(collectionView: ZSTabSectionPageCollectionView,
-                               tabView: ZSTabView,
-                               pageView: ZSPageView,
-                               tabCellClass: ZSTabCell.Type = ZSTabTextCell.self) {
-        
-        zs_config(collectionView:collectionView)
-        zs_configTabViewServe(tabView, tabCellClass: tabCellClass)
-        zs_configPageServe(pageView)
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        self.baseCollectionView = collectionView
-    }
     
     open func zs_config(collectionView: ZSTabSectionPageCollectionView) {
         
@@ -64,7 +61,6 @@ import UIKit
         collectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: NSStringFromClass(UICollectionReusableView.self))
     }
 }
-
 
 
 /**
@@ -78,23 +74,11 @@ import UIKit
         
         guard scrollView.contentSize != .zero else { return }
         
-        let bottomOffset = scrollView.contentSize.height - scrollView.bounds.height
+        let offset = scrollView.contentSize.height - scrollView.bounds.height
         
-        if isSectionFloatEnable == false
+        if scrollView.contentOffset.y >= offset
         {
-            if scrollView.contentOffset.y <= bottomOffset - tabViewHeight && scrollView.contentOffset.y >= 0
-            {
-                scrollView.contentInset = UIEdgeInsets(top: -scrollView.contentOffset.y, left: 0, bottom: 0, right: 0)
-            }
-            else if scrollView.contentOffset.y >= bottomOffset - tabViewHeight
-            {
-                scrollView.contentInset = UIEdgeInsets(top: -(bottomOffset - tabViewHeight), left: 0, bottom: 0, right: 0);
-            }
-        }
-        
-        if scrollView.contentOffset.y >= bottomOffset
-        {
-            scrollView.contentOffset = CGPoint(x: 0, y: bottomOffset)
+            scrollView.contentOffset = CGPoint(x: 0, y: offset)
             if isShouldBaseScroll
             {
                 isShouldBaseScroll = false
@@ -105,7 +89,7 @@ import UIKit
         
         if isShouldBaseScroll == false
         {
-            scrollView.contentOffset = CGPoint(x: 0, y: bottomOffset)
+            scrollView.contentOffset = CGPoint(x: 0, y: offset)
             return
         }
     }
@@ -132,7 +116,7 @@ import UIKit
             subView.removeFromSuperview()
         }
         
-        guard let view = pageViewServe.collectionView else
+        guard let view = pageViewServe?.pageView else
         {
             return cell
         }
@@ -148,8 +132,10 @@ import UIKit
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
    
         return (flowLayout!.scrollDirection == .horizontal) ?
-            CGSize(width: collectionView.frame.width - tabViewHeight, height: collectionView.frame.size.height) :
-            CGSize(width: collectionView.frame.width, height: collectionView.frame.size.height - tabViewHeight)
+            CGSize(width: collectionView.frame.width - (isSectionFloatEnable ? tabViewHeight : 0),
+                   height: collectionView.frame.size.height) :
+            CGSize(width: collectionView.frame.width,
+                   height: collectionView.frame.size.height - (isSectionFloatEnable ? tabViewHeight : 0))
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -161,7 +147,7 @@ import UIKit
             subView.removeFromSuperview()
         }
         
-        guard let view = tabViewServe.collectionView else
+        guard let view = tabViewServe?.tabView else
         {
             return header
         }
@@ -177,12 +163,7 @@ import UIKit
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout
    
         return (flowLayout!.scrollDirection == .horizontal) ?
-            CGSize(width: tabViewHeight, height: collectionView.frame.size.height) :
+            CGSize(width: tabViewHeight, height: collectionView.frame.height) :
             CGSize(width: collectionView.frame.width, height: tabViewHeight)
-    }
-    
-    open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        return tabViewHeight
     }
 }

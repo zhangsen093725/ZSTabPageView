@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ZSTabPageView
 
 class TableViewController: UITableViewController {
 
@@ -36,7 +37,7 @@ class TableViewController: UITableViewController {
     
     var _contentOffset: CGPoint = .zero
     
-    var scrollToTop: ((_ scollView: UIScrollView, _ currentOffset: CGPoint) -> CGPoint)?
+    var scrollToTop: ZSTabPagePlainDidScrollHandle?
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         

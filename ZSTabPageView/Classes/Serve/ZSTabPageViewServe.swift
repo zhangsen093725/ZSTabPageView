@@ -10,6 +10,22 @@ import UIKit
 
 @objcMembers open class ZSTabPageViewServe: NSObject, ZSTabViewServeDelegate, ZSPageViewScrollDelegate {
     
+    private override init() {
+        super.init()
+    }
+    
+    public convenience init(selectIndex: Int = 0,
+                            bind tabPageView: ZSTabPageView,
+                            register tabCellClass: ZSTabCollectionViewCell.Type = ZSTabLabelCollectionViewCell.self) {
+        self.init()
+        _selectIndex_ = selectIndex
+        
+        zs_configTabViewServe(tabPageView, tabCellClass: tabCellClass)
+        zs_configPageViewServe(tabPageView)
+        
+        self.tabPageView = tabPageView
+    }
+    
     /// tab view item 样式Serve
     public var tabViewServe: ZSTabViewServe!
     
@@ -34,37 +50,19 @@ import UIKit
     
     public var tabCount: Int = 0 {
         
-        didSet {
+        didSet
+        {
             _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
             tabViewServe.tabCount = tabCount
-            pageViewServe.tabCount = tabCount
+            pageViewServe.pageCount = tabCount
         }
     }
     
     
-    
-    /// 当前选中的 TabPage 索引
-    private var _selectIndex_: Int = 0
-    
-    private override init() {
-        super.init()
-    }
-    
-    public convenience init(selectIndex: Int = 0) {
-        self.init()
-        _selectIndex_ = selectIndex
-        tabViewServe = ZSTabViewServe(selectIndex: selectIndex)
-        pageViewServe = ZSPageViewServe(selectIndex: selectIndex)
-    }
-    
     /// 当前选择的 tab 索引
     public var selectIndex: Int { return _selectIndex_ }
-    
-    open func zs_setSelectedIndex(_ index: Int) {
-        _selectIndex_ = index
-        tabViewServe.zs_setSelectedIndex(selectIndex)
-        pageViewServe.zs_setSelectedIndex(selectIndex)
-    }
+    /// 当前选中的 TabPage 索引
+    private var _selectIndex_: Int = 0
 }
 
 
@@ -75,21 +73,26 @@ import UIKit
  */
 @objc extension ZSTabPageViewServe {
     
-    open func zs_bindTabView(_ tabPageView: ZSTabPageView,
-                             tabCellClass: ZSTabCell.Type = ZSTabTextCell.self) {
-        self.tabPageView = tabPageView
-        zs_configTabViewServe(tabPageView, tabCellClass: tabCellClass)
-        zs_configPageViewServe(tabPageView)
+    open func zs_setSelectedIndex(_ index: Int) {
+        
+        _selectIndex_ = index
+        tabViewServe.zs_setSelectedIndex(selectIndex)
+        pageViewServe.zs_setSelectedIndex(selectIndex)
     }
     
     open func zs_configTabViewServe(_ tabPageView: ZSTabPageView,
-                                    tabCellClass: ZSTabCell.Type) {
-        tabViewServe.zs_bind(collectionView: tabPageView.tabView, register: tabCellClass)
+                                    tabCellClass: ZSTabCollectionViewCell.Type) {
+        
+        tabViewServe = ZSTabViewServe(selectIndex: selectIndex,
+                                      bind: tabPageView.tabView,
+                                      register: tabCellClass)
         tabViewServe.delegate = self
     }
     
     open func zs_configPageViewServe(_ tabPageView: ZSTabPageView) {
-        pageViewServe.zs_bindView(tabPageView.pageView)
+        
+        pageViewServe = ZSPageViewServe(selectIndex: selectIndex,
+                                        bind: tabPageView.pageView)
         pageViewServe.scrollDelegate = self
     }
 }
@@ -102,16 +105,17 @@ import UIKit
 @objc extension ZSTabPageViewServe {
     
     // TODO: ZSPageViewScrollDelegate
-    open func zs_pageView(scrollView: UIScrollView, didChange page: Int) {
+    open func zs_pageView(scrollView: UIScrollView, didChange index: Int) {
         
-        if page < tabCount
+        if index < tabCount
         {
-            zs_setSelectedIndex(page)
+            zs_setSelectedIndex(index)
         }
     }
     
     // TODO: ZSTabViewServeDelegate
     open func zs_tabViewDidSelected(at index: Int) {
+        
         zs_setSelectedIndex(index)
     }
 }

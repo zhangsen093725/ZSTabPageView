@@ -9,6 +9,16 @@ import UIKit
 
 @objcMembers open class ZSPageView: UICollectionView {
     
+    public override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        
+        super.init(frame: frame, collectionViewLayout: layout)
+        isPagingEnabled = true
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     open override var isPagingEnabled: Bool {
         set {
             super.isPagingEnabled = true
@@ -18,15 +28,9 @@ import UIKit
         }
     }
     
-    override open func layoutSubviews() {
-        super.layoutSubviews()
-        
-        isPagingEnabled = true
-    }
-    
     // TODO: 动画处理
-    open func beginScrollToIndex(_ index: Int,
-                                 isAnimation: Bool) {
+    open func zs_setSelectedIndex(_ index: Int,
+                                  isAnimation: Bool) {
         reloadData()
         
         let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout

@@ -34,7 +34,10 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
     
     lazy var contentServe: ZSTabSectionPageTableViewServe = {
         
-        let contentServe = ZSTabSectionPageTableViewServe(selectIndex: -1)
+        let contentServe = ZSTabSectionPageTableViewServe(selectIndex: -1,
+                                                          bind: tableView,
+                                                          tabView: tabView,
+                                                          pageView: pageView)
         contentServe.delegate = self
         contentServe.dataSource = self
         contentServe.isSectionFloatEnable = true
@@ -83,7 +86,6 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = .white
         
-        contentServe.zs_bind(tableView: tableView, tabView: tabView, pageView: pageView)
         contentServe.tabCount = self.tabTexts.count
     }
     
@@ -112,7 +114,7 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
             addChild(controller)
         }
         
-        controller.scrollToTop = contentServe.zs_tabPagePlainContentScrollViewDidScroll()
+        controller.scrollToTop = contentServe.tabPagePlainDidScrollHandle
         controller.didMove(toParent: self)
         return controller.view
     }
@@ -133,9 +135,9 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         return CGSize(width: 30 + index * 10, height: 44)
     }
     
-    func zs_configTabCell(_ cell: ZSTabCell, forItemAt index: Int) {
+    func zs_configTabCell(_ cell: ZSTabCollectionViewCell, forItemAt index: Int) {
         
-        let textCell = cell as? ZSTabTextCell
+        let textCell = cell as? ZSTabLabelCollectionViewCell
         
         let isSelected: Bool = (index == contentServe.selectIndex)
         

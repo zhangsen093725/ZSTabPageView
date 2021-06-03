@@ -80,6 +80,8 @@ import UIKit
     {
         willSet
         {
+            if (newValue == selectIndex) { return; }
+            
             delegate?.zs_pageViewWillAppear(at: newValue)
             delegate?.zs_pageViewWillDisappear(at: newValue)
         }
@@ -107,7 +109,11 @@ import UIKit
     private let _displayLinkCount: Int = 8
     private var displayLinkCount: Int = 8
     
-    private var cellContentCacheViewMap: [Int : UIView] = [:]
+    private var _cellContentCacheViewMap: [Int : UIView] = [:]
+    public var cellContentCacheViewMap: [Int : UIView] {
+        
+        return _cellContentCacheViewMap
+    }
     
     deinit {
         pageView = nil
@@ -154,10 +160,11 @@ import UIKit
         if view == nil
         {
             view = delegate?.zs_pageView(at: selectIndex)
-            cellContentCacheViewMap[selectIndex] = view
+            _cellContentCacheViewMap[selectIndex] = view
             cell.contentView.addSubview(view!)
-            view!.frame = cell.contentView.bounds
         }
+        
+        view?.frame = cell.contentView.bounds
     }
 }
 
@@ -170,7 +177,7 @@ import UIKit
     
     /// 清除PageView的缓存
     open func zs_clearCache() {
-        cellContentCacheViewMap.removeAll()
+        _cellContentCacheViewMap.removeAll()
     }
     
     open func zs_config(pageView: ZSPageView) {
@@ -272,6 +279,7 @@ import UIKit
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(UICollectionViewCell.self), for: indexPath)
         
         cell.isExclusiveTouch = true
+        cell.contentView.frame = cell.bounds
 
         for subView in cell.contentView.subviews
         {

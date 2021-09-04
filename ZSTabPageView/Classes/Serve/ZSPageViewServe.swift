@@ -37,9 +37,17 @@ import UIKit
     
     /// scrollView 将要滚动，手指放上
     /// - Parameter scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
+    @objc optional func zs_pageViewWillBeginDragging(_ scrollView: UIScrollView)
     
     /// scrollView 滚动结束，手指离开
+    /// - Parameter scrollView: 当前滚动的ScrollView
+    @objc optional func zs_pageViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
+    
+    /// scrollView 将要开始减速
+    /// - Parameter scrollView: 当前滚动的ScrollView
+    @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
+    
+    /// scrollView 减速完成
     /// - Parameter scrollView: 当前滚动的ScrollView
     @objc optional func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
 }
@@ -266,6 +274,16 @@ import UIKit
         startDisplayLink()
         pageViewScrollToIndexEnable = true
         scrollDelegate?.zs_pageViewDidEndDecelerating?(scrollView)
+    }
+    
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        scrollDelegate?.zs_pageViewWillBeginDragging?(scrollView)
+    }
+    
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        scrollDelegate?.zs_pageViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
     
     // TODO: UICollectionViewDataSource

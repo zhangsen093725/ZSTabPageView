@@ -104,6 +104,10 @@ import UIKit
     {
         didSet
         {
+            if pageCount <= 0
+            {
+                _selectIndex_ = 0
+            }
             zs_clearCache()
             pageView?.reloadData()
             zs_setSelectedIndex(selectIndex)

@@ -68,7 +68,16 @@ public typealias ZSTabPagePlainDidScrollHandle = (_ scrollView: UIScrollView, _ 
     public var tabCount: Int = 0 {
         
         didSet {
-            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
+            
+            if tabCount > 0
+            {
+                _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
+            }
+            else
+            {
+                _selectIndex_ = 0
+            }
+            
             tabViewServe?.tabCount = tabCount
             pageViewServe?.pageCount = tabCount
         }

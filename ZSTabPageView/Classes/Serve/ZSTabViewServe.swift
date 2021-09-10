@@ -69,8 +69,16 @@ import UIKit
         
         didSet {
             tabView?.reloadData()
-            _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
-            tabView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
+            
+            if tabCount > 0
+            {
+                _selectIndex_ = selectIndex < tabCount ? selectIndex : tabCount - 1
+                tabView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
+            }
+            else
+            {
+                _selectIndex_ = 0
+            }
         }
     }
     

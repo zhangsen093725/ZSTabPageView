@@ -114,6 +114,14 @@ import UIKit
         }
     }
     
+    /// page insert
+    public var pageViewInset: UIEdgeInsets = .zero {
+        
+        didSet {
+            pageView?.reloadData()
+        }
+    }
+    
     /// UICollectionView 是否允许ScrollToIndex
     fileprivate var pageViewScrollToIndexEnable: Bool = true
     
@@ -197,7 +205,7 @@ import UIKit
         pageView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: NSStringFromClass(UICollectionViewCell.self))
     }
     
-    open func zs_setSelectedIndex(_ index: Int) {
+    open func zs_setSelectedIndex(_ index: Int, animation: Bool = false) {
         
         guard pageCount > 0 else { return }
         
@@ -208,7 +216,7 @@ import UIKit
         
         guard pageViewScrollToIndexEnable else { return }
         
-        pageView?.zs_setSelectedIndex(selectIndex, isAnimation: false)
+        pageView?.zs_setSelectedIndex(selectIndex, isAnimation: animation)
         pageView?.layoutIfNeeded()
         
         stopDisplayLink()

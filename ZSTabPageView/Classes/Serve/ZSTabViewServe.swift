@@ -102,13 +102,13 @@ import UIKit
     public var selectIndex: Int { return _selectIndex_ }
     private var _selectIndex_: Int = 0
     
-    open func zs_setSelectedIndex(_ index: Int) {
+    open func zs_setSelectedIndex(_ index: Int, animation: Bool = true) {
         
         guard tabCount > 0 else { return }
         
         let _index = index > 0 ? index : 0
         _selectIndex_ = _index < tabCount ? _index : tabCount - 1
-        tabView?.zs_setSelectedIndex(selectIndex, isAnimation: true)
+        tabView?.zs_setSelectedIndex(selectIndex, isAnimation: animation)
     }
     
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

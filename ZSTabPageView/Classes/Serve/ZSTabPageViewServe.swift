@@ -81,11 +81,11 @@ import UIKit
  */
 @objc extension ZSTabPageViewServe {
     
-    open func zs_setSelectedIndex(_ index: Int) {
+    open func zs_setSelectedIndex(_ index: Int, tabAnimation: Bool = true, pageAnimation: Bool = false) {
         
         _selectIndex_ = index
-        tabViewServe.zs_setSelectedIndex(selectIndex)
-        pageViewServe.zs_setSelectedIndex(selectIndex)
+        tabViewServe.zs_setSelectedIndex(selectIndex, animation: tabAnimation)
+        pageViewServe.zs_setSelectedIndex(selectIndex, animation: pageAnimation)
     }
     
     open func zs_configTabViewServe(_ tabPageView: ZSTabPageView,

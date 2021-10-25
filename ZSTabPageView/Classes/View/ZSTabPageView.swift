@@ -129,13 +129,17 @@ import UIKit
         {
             tabView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: tabViewHeight)
             spaceView.frame = CGRect(x: spaceViewInsets.left, y: tabView.frame.maxY + spaceViewInsets.top - spaceViewInsets.bottom, width: bounds.width - spaceViewInsets.left - spaceViewInsets.right, height: spaceViewHeight)
-            pageView.frame = CGRect(x: 0, y: tabView.frame.maxY, width: bounds.width, height: bounds.height - tabView.frame.maxY)
+            
+            let pageViewY = spaceViewHeight > 1 ? spaceView.frame.maxY : tabView.frame.maxY
+            pageView.frame = CGRect(x: 0, y: pageViewY, width: bounds.width, height: bounds.height - pageViewY)
         }
         else
         {
             tabView.frame = CGRect(x: 0, y: 0, width: tabViewHeight, height: bounds.height)
             spaceView.frame = CGRect(x: tabView.frame.maxX + spaceViewInsets.left - spaceViewInsets.right, y: spaceViewInsets.top, width: spaceViewHeight, height: bounds.height - spaceViewInsets.top - spaceViewInsets.bottom)
-            pageView.frame = CGRect(x: tabView.frame.maxX, y: 0, width: bounds.width - spaceView.frame.maxX, height: bounds.height)
+            
+            let pageViewX = spaceViewHeight > 1 ? spaceView.frame.maxX : tabView.frame.maxX
+            pageView.frame = CGRect(x: pageViewX, y: 0, width: bounds.width - pageViewX, height: bounds.height)
         }
     }
 }

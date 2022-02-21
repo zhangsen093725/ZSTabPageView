@@ -156,13 +156,8 @@ import UIKit
     
     // TODO: UICollectionViewDelegateFlowLayout
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let size = dataSource?.zs_configTabCellSize(forItemAt: indexPath.item) ?? .zero
-        
-        let width = size.width - tabViewInset.left - tabViewInset.right
-        let height = size.height - tabViewInset.top - tabViewInset.bottom
-        
-        return (width > 0 && height > 0) ? CGSize(width: width, height: height) : .zero
+    
+        return dataSource?.zs_configTabCellSize(forItemAt: indexPath.item) ?? .zero
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

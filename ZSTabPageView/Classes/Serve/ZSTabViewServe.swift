@@ -51,7 +51,7 @@ import UIKit
     }
     
     public weak var tabView: ZSTabView? {
-
+        
         didSet {
             oldValue?.removeObserver(self, forKeyPath: "frame")
             tabView?.addObserver(self, forKeyPath: "frame", options: [.new, .old], context: nil)
@@ -121,7 +121,7 @@ import UIKit
             let old = change?[.oldKey] as? CGRect
             
             guard new != old else { return }
-    
+            
             zs_setSelectedIndex(selectIndex)
         }
     }
@@ -157,7 +157,12 @@ import UIKit
     // TODO: UICollectionViewDelegateFlowLayout
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return dataSource?.zs_configTabCellSize(forItemAt: indexPath.item) ?? .zero
+        let size = dataSource?.zs_configTabCellSize(forItemAt: indexPath.item) ?? .zero
+        
+        let width = size.width - tabViewInset.left - tabViewInset.right
+        let height = size.height - tabViewInset.top - tabViewInset.bottom
+        
+        return (width > 0 && height > 0) ? CGSize(width: width, height: height) : .zero
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -177,7 +182,7 @@ import UIKit
     
     // TODO: UICollectionViewDelegate
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+        
         delegate?.zs_tabViewDidSelected(at: indexPath.item)
     }
 }

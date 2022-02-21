@@ -329,12 +329,15 @@ import UIKit
     // TODO: UICollectionViewDelegateFlowLayout
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return collectionView.bounds.size
+        let width = collectionView.bounds.width - pageViewInset.left - pageViewInset.right
+        let height = collectionView.bounds.height - pageViewInset.top - pageViewInset.bottom
+        
+        return (width > 0 && height > 0) ? CGSize(width: width, height: height) : .zero
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return .zero
+        return pageViewInset
     }
     
     open func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

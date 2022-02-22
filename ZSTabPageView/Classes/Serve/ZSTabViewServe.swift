@@ -12,7 +12,7 @@ import UIKit
     
     /// tab 点击回调
     /// - Parameter index: 当前点击的索引
-    func zs_tabViewDidSelected(at index: Int)
+    @objc optional func zs_tabViewDidSelected(at index: Int)
 }
 
 @objc public protocol ZSTabViewServeDataSource {
@@ -178,6 +178,6 @@ import UIKit
     // TODO: UICollectionViewDelegate
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        delegate?.zs_tabViewDidSelected(at: indexPath.item)
+        delegate?.zs_tabViewDidSelected?(at: indexPath.item)
     }
 }

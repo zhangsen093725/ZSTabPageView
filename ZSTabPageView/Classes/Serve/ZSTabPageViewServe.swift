@@ -8,7 +8,15 @@
 
 import UIKit
 
-@objcMembers open class ZSTabPageViewServe: NSObject, ZSTabViewServeDelegate, ZSPageViewScrollDelegate {
+@objc public protocol ZSTabPageViewServeDelegate : ZSTabViewServeDelegate, ZSPageViewServeDelegate {
+    
+}
+
+@objc public protocol ZSTabPageViewServeDataSource : ZSTabViewServeDataSource, ZSPageViewServeDataSource {
+    
+}
+
+@objcMembers open class ZSTabPageViewServe: NSObject, ZSTabViewServeDelegate, ZSPageViewServeDelegate {
     
     private override init() {
         super.init()
@@ -34,16 +42,11 @@ import UIKit
     
     public weak var tabPageView: ZSTabPageView?
     
-    public weak var delegate: ZSPageViewServeDelegate? {
+    public weak var delegate: ZSTabPageViewServeDelegate?
+    public weak var dataSource: ZSTabPageViewServeDataSource? {
         
         didSet {
-            pageViewServe.delegate = delegate
-        }
-    }
-    
-    public weak var dataSource: ZSTabViewServeDataSource? {
-        
-        didSet {
+            pageViewServe.dataSource = dataSource
             tabViewServe.dataSource = dataSource
         }
     }
@@ -101,18 +104,18 @@ import UIKit
         
         pageViewServe = ZSPageViewServe(selectIndex: selectIndex,
                                         bind: tabPageView.pageView)
-        pageViewServe.scrollDelegate = self
+        pageViewServe.delegate = self
     }
 }
 
 
 /**
- * 1. ZSPageViewScrollDelegate 的代理
+ * 1. ZSPageViewServeDelegate 的代理
  * 2. 可根据需求进行重写
  */
 @objc extension ZSTabPageViewServe {
     
-    // TODO: ZSPageViewScrollDelegate
+    // TODO: ZSPageViewServeDelegate
     open func zs_pageView(scrollView: UIScrollView, didChange index: Int) {
         
         if index < tabCount
@@ -121,9 +124,57 @@ import UIKit
         }
     }
     
+    open func zs_pageViewWillAppear(at index: Int) {
+        
+        delegate?.zs_pageViewWillAppear?(at: index)
+    }
+    
+    open func zs_pageViewWillDisappear(at index: Int) {
+        
+        delegate?.zs_pageViewWillDisappear?(at: index)
+    }
+    
+    
+    
     // TODO: ZSTabViewServeDelegate
     open func zs_tabViewDidSelected(at index: Int) {
         
         zs_setSelectedIndex(index)
+        delegate?.zs_tabViewDidSelected?(at: index)
+    }
+}
+
+
+
+/**
+ * 1. UIScrollViewDelegate
+ * 2. 可根据需求进行重写
+ */
+@objc extension ZSTabPageViewServe {
+    
+    // TODO: UIScrollViewDelegate
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        delegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+    
+        delegate?.scrollViewWillBeginDecelerating?(scrollView)
+    }
+    
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+        delegate?.scrollViewDidEndDecelerating?(scrollView)
+    }
+    
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        delegate?.scrollViewWillBeginDragging?(scrollView)
+    }
+    
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        delegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
 }

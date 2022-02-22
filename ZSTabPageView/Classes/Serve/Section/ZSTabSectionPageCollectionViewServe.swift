@@ -70,7 +70,34 @@ import UIKit
 @objc extension ZSTabSectionPageCollectionViewServe {
     
     // UIScrollViewDelegate
-    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    open override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        super.scrollViewDidScroll(scrollView)
+        
+        guard scrollView.contentSize != .zero else { return }
+        
+        let translatedPoint = scrollView.panGestureRecognizer.translation(in: scrollView)
+     
+        if fabs(Double(translatedPoint.y)) >= fabs(Double(translatedPoint.x)) && !isScrollDirectionHorizontal
+        {
+            isScrollDirectionVertical = true
+        }
+        
+        if fabs(Double(translatedPoint.x)) >= fabs(Double(translatedPoint.y)) && !isScrollDirectionHorizontal
+        {
+            isScrollDirectionHorizontal = true
+        }
+        
+        if scrollView == pageViewServe?.pageView
+        {
+            if isScrollDirectionVertical
+            {
+                scrollView.contentOffset = CGPoint(x: Double(selectIndex) * scrollView.bounds.width, y: 0)
+                return
+            }
+        }
+        
+        guard scrollView == baseCollectionView else { return }
         
         guard scrollView.contentSize != .zero else { return }
         

@@ -10,7 +10,7 @@ import UIKit
 import ZSTabPageView
 import ZSViewUtil
 
-class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, ZSTabViewServeDataSource {
+class ZSTabPagePlainDemoController: UIViewController, ZSTabSectionPageServeDelegate, ZSTabSectionPageServeDataSource {
     
     public lazy var tableView: ZSTabSectionPageTableView = {
         
@@ -101,6 +101,25 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
     }
     
     // TODO: ZSPageViewServeDelegate
+    func zs_pageViewWillDisappear(at index: Int) {
+        
+        print(index)
+    }
+    
+    func zs_pageViewWillAppear(at index: Int) {
+        
+        
+    }
+    
+    func zs_pageView(scrollView: UIScrollView, didChange index: Int) {
+        
+    }
+    
+    func zs_tabViewDidSelected(at index: Int) {
+        
+    }
+    
+    // TODO: ZSTabViewServeDataSource
     func zs_pageView(at index: Int) -> UIView {
         
         var controller: TableViewController!
@@ -119,17 +138,6 @@ class ZSTabPagePlainDemoController: UIViewController, ZSPageViewServeDelegate, Z
         return controller.view
     }
     
-    func zs_pageViewWillDisappear(at index: Int) {
-        
-        print(index)
-    }
-    
-    func zs_pageViewWillAppear(at index: Int) {
-        
-        
-    }
-    
-    // TODO: ZSTabViewServeDataSource
     func zs_configTabCellSize(forItemAt index: Int) -> CGSize {
         
         return CGSize(width: 30 + index * 10, height: 44)

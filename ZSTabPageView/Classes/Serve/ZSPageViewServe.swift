@@ -7,22 +7,19 @@
 
 import UIKit
 
-@objc public protocol ZSPageViewServeDelegate {
+@objc public protocol ZSPageViewServeDataSource {
     
     /// Page需要展示的View
     /// - Parameter index: 当前Page的索引
     func zs_pageView(at index: Int) -> UIView
-    
-    /// Page将要消失的View
-    /// - Parameter index: 当前Page的索引
-    func zs_pageViewWillDisappear(at index: Int)
-    
-    /// Page将要显示的View
-    /// - Parameter index: 当前Page的索引
-    func zs_pageViewWillAppear(at index: Int)
+
+    /// Page 需要展示的View Frame，默认是 PageView 中的 Cell bounds
+    /// @param index 当前Page的索引
+    /// @param superView 父视图
+    @objc optional func zs_pageViewCellFrameForItem(at index: Int, superView : UIView) -> CGRect
 }
 
-@objc public protocol ZSPageViewScrollDelegate {
+@objc public protocol ZSPageViewServeDelegate : UIScrollViewDelegate {
     
     /// page 滚动结束的回调
     /// - Parameters:
@@ -30,26 +27,13 @@ import UIKit
     ///   - page: 当前的页码
     func zs_pageView(scrollView: UIScrollView, didChange index: Int)
     
-    /// scrollView 滚动的回调
-    /// - Parameters:
-    ///   - scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewDidScroll(_ scrollView: UIScrollView)
+    /// Page将要消失的View
+    /// - Parameter index: 当前Page的索引
+    @objc optional func zs_pageViewWillDisappear(at index: Int)
     
-    /// scrollView 将要滚动，手指放上
-    /// - Parameter scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewWillBeginDragging(_ scrollView: UIScrollView)
-    
-    /// scrollView 滚动结束，手指离开
-    /// - Parameter scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool)
-    
-    /// scrollView 将要开始减速
-    /// - Parameter scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewWillBeginDecelerating(_ scrollView: UIScrollView)
-    
-    /// scrollView 减速完成
-    /// - Parameter scrollView: 当前滚动的ScrollView
-    @objc optional func zs_pageViewDidEndDecelerating(_ scrollView: UIScrollView)
+    /// Page将要显示的View
+    /// - Parameter index: 当前Page的索引
+    @objc optional func zs_pageViewWillAppear(at index: Int)
 }
 
 @objcMembers open class ZSPageViewServe: NSObject, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -90,14 +74,14 @@ import UIKit
         {
             if (newValue == selectIndex) { return; }
             
-            delegate?.zs_pageViewWillAppear(at: newValue)
-            delegate?.zs_pageViewWillDisappear(at: newValue)
+            delegate?.zs_pageViewWillAppear?(at: newValue)
+            delegate?.zs_pageViewWillDisappear?(at: newValue)
         }
     }
     
-    weak var delegate: ZSPageViewServeDelegate?
+    weak var dataSource: ZSPageViewServeDataSource?
     
-    public weak var scrollDelegate: ZSPageViewScrollDelegate?
+    public weak var delegate: ZSPageViewServeDelegate?
     
     /// tab count
     public var pageCount: Int = 0
@@ -179,12 +163,29 @@ import UIKit
         
         if view == nil
         {
-            view = delegate?.zs_pageView(at: selectIndex)
+            view = dataSource?.zs_pageView(at: selectIndex)
             _cellContentCacheViewMap[selectIndex] = view
-            cell.contentView.addSubview(view!)
         }
         
-        view?.frame = cell.contentView.bounds
+        zs_cellContentView(contentView: cell.contentView, layoutCaCheViewFor: selectIndex)
+    }
+    
+    private func zs_cellContentView(contentView : UIView, layoutCaCheViewFor index: Int) {
+        
+        guard let view = cellContentCacheViewMap[index] else { return }
+        
+        contentView.addSubview(view)
+        
+        if let frame = dataSource?.zs_pageViewCellFrameForItem?(at: index, superView: contentView)
+        {
+            view.frame = frame
+        }
+        else
+        {
+            view.frame = contentView.bounds
+        }
+        
+        view.isHidden = false
     }
 }
 
@@ -251,7 +252,7 @@ import UIKit
     // TODO: UIScrollViewDelegate
     open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        scrollDelegate?.zs_pageViewDidScroll?(scrollView)
+        delegate?.scrollViewDidScroll?(scrollView)
         
         let flowLayout = pageView?.collectionViewLayout as? UICollectionViewFlowLayout
         
@@ -270,7 +271,7 @@ import UIKit
         
         guard selectIndex != page else { return }
         
-        scrollDelegate?.zs_pageView(scrollView: scrollView, didChange: page)
+        delegate?.zs_pageView(scrollView: scrollView, didChange: page)
     }
     
     open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
@@ -278,24 +279,24 @@ import UIKit
         stopDisplayLink()
         displayLinkCount = _displayLinkCount
         pageViewScrollToIndexEnable = false
-        scrollDelegate?.zs_pageViewWillBeginDecelerating?(scrollView)
+        delegate?.scrollViewWillBeginDecelerating?(scrollView)
     }
     
     open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
         startDisplayLink()
         pageViewScrollToIndexEnable = true
-        scrollDelegate?.zs_pageViewDidEndDecelerating?(scrollView)
+        delegate?.scrollViewDidEndDecelerating?(scrollView)
     }
     
     open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         
-        scrollDelegate?.zs_pageViewWillBeginDragging?(scrollView)
+        delegate?.scrollViewWillBeginDragging?(scrollView)
     }
     
     open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         
-        scrollDelegate?.zs_pageViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+        delegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
     
     // TODO: UICollectionViewDataSource
@@ -317,11 +318,7 @@ import UIKit
             subView.removeFromSuperview()
         }
         
-        guard let view = cellContentCacheViewMap[indexPath.item] else { return cell }
-        
-        cell.contentView.addSubview(view)
-        view.isHidden = false
-        view.frame = cell.contentView.bounds
+        zs_cellContentView(contentView: cell.contentView, layoutCaCheViewFor: indexPath.item)
         
         return cell
     }

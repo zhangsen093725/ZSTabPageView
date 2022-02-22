@@ -9,21 +9,27 @@ import UIKit
 
 public typealias ZSTabPagePlainDidScrollHandle = (_ scrollView: UIScrollView, _ currentOffset: CGPoint) -> CGPoint
 
-@objcMembers open class ZSTabSectionPageServe: NSObject, ZSTabViewServeDelegate, ZSPageViewScrollDelegate {
+@objc public protocol ZSTabSectionPageServeDelegate : ZSTabViewServeDelegate, ZSPageViewServeDelegate {
     
+}
 
+@objc public protocol ZSTabSectionPageServeDataSource : ZSTabViewServeDataSource, ZSPageViewServeDataSource {
+    
+}
+
+
+@objcMembers open class ZSTabSectionPageServe: NSObject, ZSTabViewServeDelegate, ZSPageViewServeDelegate {
+    
     public var tabViewServe: ZSTabViewServe?
     
     public var pageViewServe: ZSPageViewServe?
     
-    public weak var delegate: ZSPageViewServeDelegate? {
-        didSet {
-            pageViewServe?.delegate = delegate
-        }
-    }
+    public weak var delegate: ZSTabSectionPageServeDelegate?
     
-    public weak var dataSource: ZSTabViewServeDataSource? {
+    public weak var dataSource: ZSTabSectionPageServeDataSource? {
+        
         didSet {
+            pageViewServe?.dataSource = dataSource
             tabViewServe?.dataSource = dataSource
         }
     }
@@ -60,10 +66,13 @@ public typealias ZSTabPagePlainDidScrollHandle = (_ scrollView: UIScrollView, _ 
     }
     
     /// base view 是否可以滚动
-    var isShouldBaseScroll: Bool = true
+    public var isShouldBaseScroll: Bool = true
     
     /// tab page 是否可以滚动
-    var isShouldPageScroll: Bool = false
+    public var isShouldPageScroll: Bool = false
+    
+    public var isScrollDirectionVertical: Bool = false
+    public var isScrollDirectionHorizontal: Bool = false
     
     public var tabCount: Int = 0 {
         
@@ -115,7 +124,7 @@ public typealias ZSTabPagePlainDidScrollHandle = (_ scrollView: UIScrollView, _ 
         
         pageViewServe = ZSPageViewServe(selectIndex: selectIndex,
                                         bind: pageView)
-        pageViewServe?.scrollDelegate = self
+        pageViewServe?.delegate = self
     }
 }
 
@@ -144,8 +153,56 @@ public typealias ZSTabPagePlainDidScrollHandle = (_ scrollView: UIScrollView, _ 
         }
     }
     
+    open func zs_pageViewWillAppear(at index: Int) {
+        
+        delegate?.zs_pageViewWillAppear?(at: index)
+    }
+    
+    open func zs_pageViewWillDisappear(at index: Int) {
+        
+        delegate?.zs_pageViewWillDisappear?(at: index)
+    }
+    
     // TODO: ZSTabViewServeDelegate
     open func zs_tabViewDidSelected(at index: Int) {
+        
         zs_setSelectedIndex(index)
+        delegate?.zs_tabViewDidSelected?(at: index)
+    }
+}
+
+
+
+
+/**
+ * 1. UIScrollViewDelegate
+ * 2. 可根据需求进行重写
+ */
+@objc extension ZSTabSectionPageServe {
+    
+    // TODO: UIScrollViewDelegate
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        delegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    open func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+    
+        delegate?.scrollViewWillBeginDecelerating?(scrollView)
+    }
+    
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+        delegate?.scrollViewDidEndDecelerating?(scrollView)
+    }
+    
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        delegate?.scrollViewWillBeginDragging?(scrollView)
+    }
+    
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        
+        delegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
     }
 }

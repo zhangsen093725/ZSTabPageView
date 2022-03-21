@@ -124,6 +124,10 @@ import UIKit
     
     open override func layoutSubviews() {
         super.layoutSubviews()
+        customLayoutSubviews()
+    }
+    
+    open func customLayoutSubviews() {
         
         if scrollDirection == .horizontal
         {
